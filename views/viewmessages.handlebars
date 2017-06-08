@@ -1,0 +1,43 @@
+<section class="main">
+  <div class='row linktoportal'>
+    <div class="col-sm-12">
+      <a href="adminportal">Return to Admin Portal</a>
+    </div>
+  </div>
+  <div class='row'>
+    <div class="col-sm-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3>Message Activity</h3>
+        </div>
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-xs-3">
+              <h3>Name</h3>
+            </div>
+            <div class="col-xs-3">
+              <h3>E-Mail</h3>
+            </div>
+            <div class="col-xs-6">
+              <h3>Message</h3>
+            </div>
+          </div>
+        </div>
+        {{#each messagedata}}
+          <hr>
+          <div class="row">
+            <div class="col-xs-3">
+              {{this.name}}
+            </div>
+            <div class="col-xs-3">
+              {{this.email}}
+            </div>
+            <div class="col-xs-6">
+              {{this.message}}
+            </div>
+          </div>
+        {{/each}}
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,100 @@
+<section class="main">
+  <div class='row linktoportal'>
+    <div class="col-sm-12">
+      <a href="adminportal">Return to Admin Portal</a>
+    </div>
+  </div>
+  <div class='row'>
+    <div class="col-sm-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3>Portfolio Object Administration</h3>
+        </div>
+        <div class="panel-body">
+          <h2>Add New Portfolio Object
+            <i class="fa fa-plus-square" id="addnewproject"></i>
+          </h2>
+          <hr>
+
+          <h2>Update Existing Portfolio Objects</h2>
+          <hr>
+            {{#each projectdata}}
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="panel panel-default">
+                    <div class="panel-heading portfoliotitle">
+                      <span class="portfoliotitletext">{{this.ProjectName}}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm-6">
+                  <form action="updateportfolio" method="POST">
+                    <p>ProjectName:</p><input type="text" id="ProjectName" name="ProjectName" value="{{this.ProjectName}}"/>
+                    <p>ProjectBlurb:</p><input type="text" id="ProjectBlurb" name="ProjectBlurb" value="{{this.ProjectBlurb}}"/> 
+                    <p>ProjectURL:</p><input type="text" id="ProjectURL" name="ProjectURL" value="{{this.ProjectURL}}"/> 
+                    <p>GithubURL:</p><input type="text" id="GithubURL" name="GithubURL" value="{{this.GithubURL}}"/> 
+                    <p>ProjectIMG:</p><input type="text" id="ProjectIMG" name="ProjectIMG" value="{{this.ProjectIMG}}"/> 
+                    <input type="hidden" id="dbid" name="dbid" value="{{this.id}}"/>
+                    
+                    <p>
+                      <button type="submit" id="update" class="btn btn-primary">Update This Project</button>
+                      <a href="deleteportfolioproject/{{this.id}}">
+                        <button type="button" id="delete" class="btn btn-danger">Delete This Project</button>
+                      </a>
+                    </p>
+                  </form>
+                </div>
+                <div class="col-sm-6 projectdisplay">
+                  <a target="new" href="{{this.ProjectURL}}">
+                    <img src="images/{{this.ProjectIMG}}" alt="{{this.ProjectName}}" class="adminimage">
+                  </a>
+                  <p class='projecttitle'><a target="new" href="{{this.ProjectURL}}">{{this.ProjectName}}</a></p>
+                  <p class="projectinfo">{{this.ProjectBlurb}}</p>
+                  <p class="projectinfo"><a href="{{this.GithubURL}}" target="new">View on Github</a></p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="cols-sm-12">
+                  <hr/>
+                </div>
+              </div>
+            {{/each}}
+
+              <Br/><Br/><Br/><Br/>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4>Add New Project</h4>
+        </div>
+        
+        <div class="modal-body">
+          <form action="newportfolio" method="POST">
+            <p>ProjectName:</p><input type="text" id="NewProjectName" name="NewProjectName"/>
+            <p>ProjectBlurb:</p><input type="text" id="NewProjectBlurb" name="NewProjectBlurb"/> 
+            <p>ProjectURL:</p><input type="text" id="NewProjectURL" name="NewProjectURL"/> 
+            <p>GithubURL:</p><input type="text" id="NewGithubURL" name="NewGithubURL"/> 
+            <p>ProjectIMG:</p><input type="text" id="NewProjectIMG" name="NewProjectIMG"/> 
+            <p><button type="submit" id="update">Submit</button></p>
+            <p><button type="cancel" id="cancel" data-dismiss="modal">Cancel</button></p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div> 
+
+
+
+</section>
