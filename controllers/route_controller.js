@@ -9,8 +9,7 @@ var nodemailer = require('nodemailer');
 var transporter = require('../config/transporter.js');
 var sequelizeConnection = models.sequelize;
 var multer  = require('multer');
-// var upload = multer({ dest: '../public/images/' });
-var upload = multer({dest: __dirname + '/public/images/'});
+var upload = multer({dest: __dirname + '/public/images/'}); 
 var fs = require('fs');
 
 //==================================
@@ -31,17 +30,6 @@ router.get('/index', function(req, res) {
 
 });
 
-router.get('/bio', function (req, res) {
-   models.Bio.findOne({
-     where: {id: 1}
-   })
-  .then(function(data) {
-    var payload = {biodata: data}
-    return res.render('bio', {biodata: payload.biodata});
-  })
-  // res.render('bio');
-});
-
 router.get('/schedule', function (req, res) {
   res.render('schedule');
 });
@@ -49,7 +37,6 @@ router.get('/schedule', function (req, res) {
 router.get('/videos', function (req, res) {
   res.render('videos');
 });
-
 
 router.get('/contact', function(req, res) {
   res.render('contact');
@@ -160,49 +147,58 @@ router.post('/contact/message', function(req, res) {
   res.redirect('../contact');
 });
 
-//Process portfolio update requests
-router.post('/updateportfolio', isLoggedIn, function(req, res) {
-  //Create String to update MySQL
-  var queryString = 'UPDATE Projects SET ProjectName="' + req.body.ProjectName + '", ProjectBlurb="' + req.body.ProjectBlurb + '", ProjectURL="' + req.body.ProjectURL + '", GithubURL="' + req.body.GithubURL + '", ProjectIMG="' + req.body.ProjectIMG + '", updatedAt=CURDATE() WHERE id="' + req.body.dbid + '"';
-  
-  //Run SQL query to update data
-  connection.query(queryString, function (err, result) {
-    if (err) throw err;
-  });
-  res.redirect('../adminportfolio');
-});
-
-//Process new portfolio object requests
-router.post('/newportfolio', isLoggedIn, function(req, res) {
-  //Create String to update MySQL
-  var queryString = 'INSERT INTO Projects (ProjectName, ProjectBlurb, ProjectURL, GithubURL, ProjectIMG, createdAt, updatedAt) VALUES ("' + req.body.NewProjectName + '", "' + req.body.NewProjectBlurb + '", "' + req.body.NewProjectURL + '", "' + req.body.NewGithubURL + '", "' + req.body.NewProjectIMG + '", CURDATE(), CURDATE())';  
-  //Run SQL query to update data
-  connection.query(queryString, function (err, result) {
-    if (err) throw err;
-  });
-  res.redirect('../adminportfolio');
-});
-
 //Process About Me update requests
-router.post('/updateAboutMe', isLoggedIn, upload.single('profilepicture'), function(req, res) {
-  var profileImageToUpload;
+router.post('/updateAboutMe', isLoggedIn, upload.any(), function(req, res) {
+  
+  //Previous settings. Used if not overwritten below.
+  var bioImageToUpload = req.body.BioImage; //bio image was unchaged
+  var aboutMeImageToUpload = req.body.AboutMeImage; //bio image was unchaged
 
-  //Check if image was upload & process it
-  if (typeof req.file !== "undefined") {
-    var tempImagePath  = req.file.path;
-    var destinationPath = 'public/images/' + req.file.originalname;
+  //Check if any image(s) wer uploaded
+  if (typeof req.files !== "undefined") {
 
-    var imageSource = fs.createReadStream(tempImagePath);
-    var imageDestination = fs.createWriteStream(destinationPath);
-    imageSource.pipe(imageDestination);
+    if (req.files.length == 1) {
 
-    profileImageToUpload = "/images/" + req.file.originalname;
-  } else {
-    profileImageToUpload = req.body.AboutMeImage;  
+      //If 1st image uploaded was for ABOUT ME
+      if (req.files[0].fieldname == "profilepicture") {
+        var tempAboutMeImagePath  = req.files[0].path;
+        var destinationPath = 'public/images/' + req.files[0].originalname;
+
+        var imageSource = fs.createReadStream(tempAboutMeImagePath);
+        var imageDestination = fs.createWriteStream(destinationPath);
+        imageSource.pipe(imageDestination);
+
+        aboutMeImageToUpload = "/images/" + req.files[0].originalname;
+      } else if (req.files[0].fieldname == "biopicture") {  //If image uploaded for Bio
+        var tempBioImagePath  = req.files[0].path;
+        var destinationPath = 'public/images/' + req.files[0].originalname;
+
+        var imageSource = fs.createReadStream(tempBioImagePath);
+        var imageDestination = fs.createWriteStream(destinationPath);
+        imageSource.pipe(imageDestination);
+        bioImageToUpload = "/images/" + req.files[0].originalname;
+      }
+    } else if (req.files.length == 2){ //multiple files uploaded
+        //Process AboutMe Image
+        var tempAboutMeImagePath  = req.files[0].path;
+        var destinationPath = 'public/images/' + req.files[0].originalname;
+        var imageSource = fs.createReadStream(tempAboutMeImagePath);
+        var imageDestination = fs.createWriteStream(destinationPath);
+        imageSource.pipe(imageDestination);
+        aboutMeImageToUpload = "/images/" + req.files[0].originalname;
+
+        //Process Bio Image
+        var tempBioImagePath  = req.files[1].path;
+        var bioDestinationPath = 'public/images/' + req.files[1].originalname;
+        var bioImageSource = fs.createReadStream(tempBioImagePath);
+        var bioImageDestination = fs.createWriteStream(bioDestinationPath);
+        bioImageSource.pipe(bioImageDestination);
+        bioImageToUpload = "/images/" + req.files[1].originalname;
+    }
   }
 
   //Create String to update MySQL
-  var queryString = 'UPDATE AboutMe SET bio="' + req.body.AboutMeBio + '", image="' + profileImageToUpload + '", updatedAt=CURDATE() WHERE id=1';
+  var queryString = 'UPDATE AboutMe SET about="' + req.body.AboutMeBio + '", aboutimage="' + aboutMeImageToUpload + '", bio="' + req.body.biotext + '", bioimage="' + bioImageToUpload +  '", updatedAt=CURDATE() WHERE id=1';
   
   //Run SQL query to update data
   connection.query(queryString, function (err, result) {
@@ -211,33 +207,33 @@ router.post('/updateAboutMe', isLoggedIn, upload.single('profilepicture'), funct
   res.redirect('../adminaboutme');
 });
 
-//Process Bio update requests
-router.post('/updatebio', isLoggedIn, upload.single('profilepicture'), function(req, res) {
-  var profileImageToUpload;
+// //Process Bio update requests
+// router.post('/updatebio', isLoggedIn, upload.single('profilepicture'), function(req, res) {
+//   var profileImageToUpload;
 
-  //Check if image was upload & process it
-  if (typeof req.file !== "undefined") {
-    var tempImagePath  = req.file.path;
-    var destinationPath = 'public/images/' + req.file.originalname;
+//   //Check if image was upload & process it
+//   if (typeof req.file !== "undefined") {
+//     var tempImagePath  = req.file.path;
+//     var destinationPath = 'public/images/' + req.file.originalname;
 
-    var imageSource = fs.createReadStream(tempImagePath);
-    var imageDestination = fs.createWriteStream(destinationPath);
-    imageSource.pipe(imageDestination);
+//     var imageSource = fs.createReadStream(tempImagePath);
+//     var imageDestination = fs.createWriteStream(destinationPath);
+//     imageSource.pipe(imageDestination);
 
-    profileImageToUpload = "/images/" + req.file.originalname;
-  } else {
-    profileImageToUpload = req.body.BioImage;  
-  }
+//     profileImageToUpload = "/images/" + req.file.originalname;
+//   } else {
+//     profileImageToUpload = req.body.BioImage;  
+//   }
 
-  //Create String to update MySQL
-  var queryString = 'UPDATE bio SET bio="' + req.body.Bio + '", image="' + profileImageToUpload + '", updatedAt=CURDATE() WHERE id=1';
+//   //Create String to update MySQL
+//   var queryString = 'UPDATE bio SET bio="' + req.body.Bio + '", image="' + profileImageToUpload + '", updatedAt=CURDATE() WHERE id=1';
   
-  //Run SQL query to update data
-  connection.query(queryString, function (err, result) {
-    if (err) throw err;
-  });
-  res.redirect('../adminbio');
-});
+//   //Run SQL query to update data
+//   connection.query(queryString, function (err, result) {
+//     if (err) throw err;
+//   });
+//   res.redirect('../adminbio');
+// });
 
 
 
