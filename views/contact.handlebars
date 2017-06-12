@@ -1,41 +1,27 @@
 <section class="main">
   <div class='row'>
-    <div class="col-sm-12 col-md-8">
-      <div class="panel panel-default">
-        <div class="panel-heading"><h3>Contact Me</h3></div>
-        <div class="panel-body">
-          <div class='row'>
-            <div class="aboutme">
-              <h2>Contact</h2>
-              {{!-- <form class="create-update-form" action="burgers/create" method="POST"> --}}
-              <form action="contact/message" method="POST">
-                <p>Name:</p><input type="text" id ="fname" name="fname"  placeholder="John Smith">
-                <p>E-mail:</p><input type="text" id="email" name="email"  placeholder="example@gmail.com">
-                <p>Message:</p><textarea id="message" name="message"></textarea>
-                <p><button type="submit">Submit</button></p>
-              </form>
-            
-            </div>
-          </div>
-        </div>    
-      </div>
+    <div class="col-xs-12 sectionHeader">
+      <h2>Contact</h2>
     </div>
-
-    <div class="col-sm-12 col-md-4">
-      <div class="connect">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h5>Connect with Me</h5>
-          </div>
-          <div class="panel-body">
-            <ul class="icons">
-              <li class="thumbnails"><a href="https://github.com/Tomcariello" target="_blank"><img src="images\github.png" alt="github"></a></li>
-              <li class="thumbnails"><a href="http://www.linkedin.com/in/tom-cariello" target="_blank"><img src="images\linkedin.png" alt="Linkedin"></a></li>
-              <li class="thumbnails"><a href="https://drive.google.com/open?id=0B6Yd4iwY-h4sbFhqTEJJMGM5aWs" target="_blank"><img src="images\resume.jpg" alt="Resume"></a></li>
-            </ul>
-          </div>
-        </div>    
-      </div>
+  </div>
+  <div class='row'>
+    <div class="aboutme">
+      {{!-- <form class="create-update-form" action="burgers/create" method="POST"> --}}
+      <form action="contact/message" method="POST">
+        <p>Name:</p><input type="text" id ="fname" name="fname"  placeholder="John Smith">
+        <p>E-mail:</p><input type="text" id="email" name="email"  placeholder="example@gmail.com">
+        <p>Reason:</p>
+          <select id="reason" name="reason">
+            <option>--</option>
+            <option value="1">General Inquiry</option>
+            <option value="2">Request a lesson</option>
+            <option value="3">Reason 3</option>
+            <option value="4">Reason 4</option>
+          </select>
+        <p>Message:</p><textarea id="message" name="message"></textarea>
+        <p><button type="submit">Submit</button></p>
+      </form>
+    
     </div>
   </div>
 </section>

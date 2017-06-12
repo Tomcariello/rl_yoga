@@ -1,26 +1,59 @@
 body {
     width:100%;
     height: 100%;
-    background-color: #ffffff;
+    background-color: #f0f4f4;
     margin: 0;
     padding: 0;
-    font-family: 'Arial', 'Helvetica Neue', Helvetica, sans-serif;
+	font-family: 'Open Sans Condensed', sans-serif;
 }
 .container {
 	width: 100%;
-	height: 900px;
 	background-repeat: repeat;
+	background-color: #f0f4f4;
 	background-size: 100%;
 	padding: 0px;
 }
 
+.container>.navbar-collapse, .container-fluid>.navbar-collapse {
+    border-bottom: 3px solid #ffffff;
+}
+
+h1 {
+	line-height: 0;
+	border-bottom: none;
+}
+
 a {
-	color: #777777;
 	text-decoration: none;
 }
 
-a:hover {
-	text-decoration: underline;
+.navbar-default .navbar-nav>li>a:hover, .navbar-default .navbar-nav>li>a:focus {
+    color: #3e3f3a;
+    background-color: transparent;
+}
+
+.navbar-settings {
+    position: fixed;
+    margin: 0;
+}
+.navbar .nav>li>a {
+	font-size: 20px;
+	padding-bottom: 0px
+ }
+.navbar .nav>li>a:hover {
+	border-bottom: 2px solid #ffffff;
+}
+
+
+ .navbar {
+    border-radius: 0px;
+  }
+  .navbar-default, .navbar-collapse {
+	  background-color: #f0f4f4;
+	  border-color: #f0f4f4;
+  }
+.navbar-default .navbar-brand {
+    color: #3e3f3a;
 }
 
 /*Profile Image properties*/
@@ -28,7 +61,6 @@ a:hover {
 	width: 100%;
 	display: block;
 	float: left;
-	padding: 5px 15px 15px 0;
 }
 
 .seperator {
@@ -46,10 +78,9 @@ section {
 }
 
 p {
-	color: #777777;
-	font-family: 'Arial', 'Helvetica Neue', Helvetica, sans-serif;
+	/*font-family: 'Arial', 'Helvetica Neue', Helvetica, sans-serif;*/
 	line-height: 170%;
-	font-size: 18px;
+	font-size: 22px;
 	margin-bottom: 10px;
 }
 
@@ -62,10 +93,7 @@ p {
 }
 
 .aboutme {
-	color: #4aaaa5;
-	/*height: 30px;*/
 	padding: 0 0 20px 0;
-	/*border-bottom: 1px solid #dddddd;*/
 	width: 100%;
 }
 .connect {
@@ -103,14 +131,12 @@ footer {
 	margin-top: 20px;
 	font-family: 'Arial', 'Helvetica Neue', Helvetica, sans-serif;
 	font-size: 12px;
-	color: #ffffff;
 	text-align: center;
 }
 
 .pf1, .pf2, .pf3, .pf4, .pf5 {
 	float: left;
 	width: 260px;
-	color: #ffffff;
 	margin-left: 20px;
 }
 
@@ -145,22 +171,18 @@ form > p {
 
 input[type=text] {
 	width: 100%;
-	color: #aaaaaa;
 }
 
 input[type=password] {
 	width: 100%;
-	color: #aaaaaa;
 }
 
 textarea {
 	width: 100%;
 	height: 200px;
-	color: #505050
 }
 
 button {
-	color: #ffffff;
 	background-color: #4aaaa5;
 	border: none;
 	padding: 8px 16px;
@@ -171,24 +193,12 @@ button:hover {
 	background-color: #6cccc7;
 }
 
-.navbar-settings {
-    position: fixed;
-    margin: 0;
-}
-.navbar .nav>li>a {
-  font-size: 16px;
- }
-
- .navbar {
-    border-radius: 0px;
-  }
-
 .panel-heading {
 	padding: 1px 15px;
 }
-.footer-content {
-	color: #ffffff;
+.footer {
 	text-align: center;
+	margin-top: 25px;
 }
 
 .projecttitle {
@@ -207,10 +217,6 @@ button:hover {
 
 .thumbnails {
 	padding: 4%;
-}
-
-input[type=text] {
-	color: #505050;
 }
 
 #submitButton {
@@ -247,3 +253,6 @@ input[type=text] {
 #updatebio {
 	margin-bottom: 80px;
 }
+ .yogavideo {
+	 margin-bottom: 10px;
+ }
