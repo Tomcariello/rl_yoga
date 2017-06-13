@@ -35,7 +35,12 @@ router.get('/schedule', function (req, res) {
 });
 
 router.get('/videos', function (req, res) {
-  res.render('videos');
+  //pull video data from database
+  models.Videos.findAll({})
+  .then(function(data) {
+    var payload = {videodata: data}
+    res.render('videos', {videodata: payload.videodata});
+  })
 });
 
 router.get('/contact', function(req, res) {
@@ -78,35 +83,24 @@ router.get('/adminaboutme', isLoggedIn, function(req, res) {
   })
 });
 
-router.get('/adminbio', isLoggedIn, function(req, res) {
-  //Pull about me data from database
-  models.Bio.findOne({
-    where: {id: 1}
-  })
-  .then(function(data) {
-    var payload = {biodata: data}
-    res.render('adminbio', {biodata: payload.biodata});
-  })
-});
-
-router.get('/adminportfolio', isLoggedIn, function(req, res) {
+router.get('/adminvideos', isLoggedIn, function(req, res) {
   //pull portfolio/project data from database
-  models.Project.findAll({})
+  models.Videos.findAll({})
   .then(function(data) {
-    var payload = {projectdata: data}
-    res.render('adminportfolio', {projectdata: payload.projectdata});
+    var payload = {videodata: data}
+    res.render('adminvideos', {videodata: payload.videodata});
   })
 });
 
-//Delete Portfolio Project
-router.get('/deleteportfolioproject/:projectid', isLoggedIn, function(req, res) {
+//Delete Video Object
+router.get('/deletevideos/:projectid', isLoggedIn, function(req, res) {
 
-  var queryString = 'DELETE from projects WHERE id=' + req.params.projectid + ';';
+  var queryString = 'DELETE from videos WHERE id=' + req.params.projectid + ';';
 
   connection.query(queryString, function (err, result) {
     if (err) throw err;
   });
-  res.redirect('../adminportfolio');
+  res.redirect('../adminvideos');
 })
 
 //===============================================
@@ -127,7 +121,7 @@ router.post('/login', passport.authenticate('local-login', {
 
 router.post('/contact/message', function(req, res) {
   //Parse data from form & generate query string
-  var queryString = 'INSERT INTO Messages (name, email, message, createdAt, updatedAt) VALUES ("' + req.body.fname + '", "' + req.body.email + '", "' + req.body.message + '", CURDATE(), CURDATE())';
+  var queryString = 'INSERT INTO messages (name, email, message, createdAt, updatedAt) VALUES ("' + req.body.fname + '", "' + req.body.email + '", "' + req.body.message + '", CURDATE(), CURDATE())';
 
   //Run SQL query to add data to table
   connection.query(queryString, function (err, result) {
@@ -207,33 +201,32 @@ router.post('/updateAboutMe', isLoggedIn, upload.any(), function(req, res) {
   res.redirect('../adminaboutme');
 });
 
-// //Process Bio update requests
-// router.post('/updatebio', isLoggedIn, upload.single('profilepicture'), function(req, res) {
-//   var profileImageToUpload;
+router.post('/newvideo', function(req, res) {
 
-//   //Check if image was upload & process it
-//   if (typeof req.file !== "undefined") {
-//     var tempImagePath  = req.file.path;
-//     var destinationPath = 'public/images/' + req.file.originalname;
+  //Parse data from form & generate query string
+  var queryString = 'INSERT INTO videos (videoname, description, url, createdAt, updatedAt) VALUES ("' + req.body.NewVideoName + '", "' + req.body.NewDescription + '", "' + req.body.NewVideoURL + '", CURDATE(), CURDATE())';
 
-//     var imageSource = fs.createReadStream(tempImagePath);
-//     var imageDestination = fs.createWriteStream(destinationPath);
-//     imageSource.pipe(imageDestination);
+  //Run SQL query to add data to table
+  connection.query(queryString, function (err, result) {
+    if (err) throw err;
+  });
 
-//     profileImageToUpload = "/images/" + req.file.originalname;
-//   } else {
-//     profileImageToUpload = req.body.BioImage;  
-//   }
+  res.redirect('../adminvideos');
+});
 
-//   //Create String to update MySQL
-//   var queryString = 'UPDATE bio SET bio="' + req.body.Bio + '", image="' + profileImageToUpload + '", updatedAt=CURDATE() WHERE id=1';
-  
-//   //Run SQL query to update data
-//   connection.query(queryString, function (err, result) {
-//     if (err) throw err;
-//   });
-//   res.redirect('../adminbio');
-// });
+router.post('/updatevideo', function(req, res) {
+
+  //Parse data from form & generate query string
+  var queryString = 'Update videos SET videoname="' + req.body.videoname + '", description="'+  req.body.description + '", url="' + req.body.url + '", updatedAt=CURDATE() WHERE id="' +  req.body.dbid + '"';
+
+  console.log(queryString);
+  //Run SQL query to add data to table
+  connection.query(queryString, function (err, result) {
+    if (err) throw err;
+  });
+
+  res.redirect('../adminvideos');
+});
 
 
 

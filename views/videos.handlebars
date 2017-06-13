@@ -1,7 +1,6 @@
 <section class="main">
   <div class='row'>
-
-    <div class="col-sm-12 col-md-7">
+    <div class="col-sm-12">
       <p>
         Videos
       </p>
@@ -9,24 +8,23 @@
   </div>
 
   <div class='row'>
-    <div class="col-xs-12 col-md-5 yogavideo">
-      <iframe src="https://www.youtube.com/embed/oifIkMgm40o" frameborder="0" allowfullscreen></iframe>
-    </div>
-    <div class="col-xs-12 col-md-5 yogavideo">
-      <iframe src="https://www.youtube.com/embed/oifIkMgm40o" frameborder="0" allowfullscreen></iframe>
-    </div>
+    {{#each videodata}}
+  
+    
+      <div class="col-xs-12 col-md-5 yogavideo">
+          <p>
+            {{this.videoname}}
+          </p>
+          <iframe src="{{this.url}}" frameborder="0" allowfullscreen></iframe>
+          <p>
+            {{this.description}}
+          </p>
+      </div>
+    {{/each}}
+
   </div>
-  <div class='row'>
-    <div class="col-xs-12 col-md-5 yogavideo">
-      <iframe src="https://www.youtube.com/embed/oifIkMgm40o" frameborder="0" allowfullscreen></iframe>
-    </div>
-    <div class="col-xs-12 col-md-5 yogavideo">
-      <iframe src="https://www.youtube.com/embed/oifIkMgm40o" frameborder="0" allowfullscreen></iframe>
-    </div>
-  </div>
-  <div class='row'>
-    <div class="col-xs-12 col-md-5 yogavideo">
-      <iframe src="https://www.youtube.com/embed/oifIkMgm40o" frameborder="0" allowfullscreen></iframe>
-    </div>
-  </div>
+
+
+
+
 </section>
