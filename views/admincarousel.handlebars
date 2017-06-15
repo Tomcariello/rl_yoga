@@ -1,0 +1,82 @@
+<section class="main">
+  <div class='row linktoportal'>
+    <div class="col-sm-12">
+      <a href="adminportal">Return to Admin Portal</a>
+    </div>
+  </div>
+  <div class='row'>
+    <div class="col-sm-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3>Video Object Administration</h3>
+        </div>
+        <div class="panel-body">
+          <h2>Add New Carousel Object
+            <i class="fa fa-plus-square" id="addnewproject"></i>
+          </h2>
+          <hr>
+
+          <h2>Update Carousel Images & Quotes</h2>
+          <hr>
+            {{#each carouseldata}}
+              <div class="row">
+                <form action="updateCarousel" method="POST">
+                <div class="adminImageArea col-md-5">"
+                    <p>Image:</p><input type="text" id="carouselImage" name="carouselImage" value="{{this.imagepath}}"/>
+                    <p>Quote:</p><input type="text" id="carouselQuote" name="carouselQuote" value="{{this.quote}}"/> 
+                    <p>Source:</p><input type="text" id="carouselSource" name="carouselSource" value="{{this.quotesource}}"/> 
+                    <input type="hidden" id="dbid" name="dbid" value="{{this.id}}"/>
+                    
+                    <p>
+                    <button type="submit" id="update" class="btn btn-primary">Update</button>
+                    <a href="deleteCarousel/{{this.id}}">
+                        <button type="button" id="delete" class="btn btn-danger">Delete</button>
+                    </a>
+                    </p>
+                </div>
+
+                <div class="adminTextArea col-md-7">
+                    <img src="{{this.imagepath}}">
+                </div>
+                </form>
+            </div>
+            <div class="row">
+                <div class="cols-sm-12">
+                <hr/>
+                </div>
+            </div>
+            {{/each}}
+
+              <Br/><Br/><Br/><Br/>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4>Add New Carousel Object</h4>
+        </div>
+        
+        <div class="modal-body">
+          <form action="newCarousel" method="POST">
+            <p>Image:</p><input type="text" id="NewImage" name="NewImage"/>
+            <p>Quote:</p><input type="text" id="NewQuote" name="NewQuote"/> 
+            <p>Source:</p><input type="text" id="NewSource" name="NewSource"/> 
+            <p><button type="submit" id="update">Submit</button></p>
+            <p><button type="cancel" id="cancel" data-dismiss="modal">Cancel</button></p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div> 
+
+
+
+</section>

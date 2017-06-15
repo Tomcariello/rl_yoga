@@ -175,7 +175,8 @@ form > p {
 }
 
 input[type=text] {
-	width: 100%;
+	width: 40%;
+	font-size: 22px;
 }
 
 input[type=password] {
@@ -268,4 +269,21 @@ button:hover {
     background-color: #ffffff;
     opacity: .9;
     color: #000000;
+}
+
+.words {
+    margin: 30px 0;
+    font-size: 33px;
+    text-align: center;
+    border-bottom: 1px solid rgba(0, 0, 0, .1);
+    border-top: 1px solid rgba(0, 0, 0, .1);
+    padding: 10px 0;
+}
+
+#reason {
+    width: 40%;
+	font-size: 22px;
+}
+#message {
+	font-size: 22px;
 }

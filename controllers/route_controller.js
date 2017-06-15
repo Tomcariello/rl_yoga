@@ -20,7 +20,11 @@ router.get('/', function(req, res) {
 });
 
 router.get('/index', function(req, res) {
-  res.render('index');
+    models.Carousel.findAll({})
+  .then(function(data) {
+    var payload = {carouseldata: data}
+    res.render('index', {carouseldata: payload.carouseldata});
+  })
 });
 
 router.get('/about', function(req, res) {
@@ -95,6 +99,15 @@ router.get('/adminvideos', isLoggedIn, function(req, res) {
   })
 });
 
+router.get('/admincarousel', isLoggedIn, function(req, res) {
+  //pull carousel data from database
+  models.Carousel.findAll({})
+  .then(function(data) {
+    var payload = {carouseldata: data}
+    res.render('admincarousel', {carouseldata: payload.carouseldata});
+  })
+
+});
 //Delete Video Object
 router.get('/deletevideos/:projectid', isLoggedIn, function(req, res) {
 
@@ -104,6 +117,17 @@ router.get('/deletevideos/:projectid', isLoggedIn, function(req, res) {
     if (err) throw err;
   });
   res.redirect('../adminvideos');
+})
+
+//Delete Video Object
+router.get('/deleteCarousel/:projectid', isLoggedIn, function(req, res) {
+
+  var queryString = 'DELETE from carousels WHERE id=' + req.params.projectid + ';';
+
+  connection.query(queryString, function (err, result) {
+    if (err) throw err;
+  });
+  res.redirect('../admincarousel');
 })
 
 //===============================================
@@ -222,7 +246,6 @@ router.post('/updatevideo', function(req, res) {
   //Parse data from form & generate query string
   var queryString = 'Update videos SET videoname="' + req.body.videoname + '", description="'+  req.body.description + '", url="' + req.body.url + '", updatedAt=CURDATE() WHERE id="' +  req.body.dbid + '"';
 
-  console.log(queryString);
   //Run SQL query to add data to table
   connection.query(queryString, function (err, result) {
     if (err) throw err;
@@ -231,14 +254,36 @@ router.post('/updatevideo', function(req, res) {
   res.redirect('../adminvideos');
 });
 
+router.post('/newCarousel', function(req, res) {
 
+  //Parse data from form & generate query string
+  var queryString = 'INSERT INTO carousels (imagepath, quote, quotesource, createdAt, updatedAt) VALUES ("' + req.body.NewImage + '", "' + req.body.NewQuote + '", "' + req.body.NewSource + '", CURDATE(), CURDATE())';
+
+  //Run SQL query to add data to table
+  connection.query(queryString, function (err, result) {
+    if (err) throw err;
+  });
+
+  res.redirect('../admincarousel');
+});
+
+router.post('/updateCarousel', function(req, res) {
+
+  //Parse data from form & generate query string
+  var queryString = 'Update carousels SET imagepath="' + req.body.carouselImage + '", quote="'+  req.body.carouselQuote + '", quotesource="' + req.body.carouselSource + '", updatedAt=CURDATE() WHERE id="' +  req.body.dbid + '"';
+
+  //Run SQL query to add data to table
+  connection.query(queryString, function (err, result) {
+    if (err) throw err;
+  });
+
+  res.redirect('../admincarousel');
+});
 
 
 
 // route middleware to make sure user is verified
 function isLoggedIn(req, res, next) {
-  console.log('checking user login status');
-
   // if user is authenticated in the session, carry on
   if (req.isAuthenticated())
     return next();
