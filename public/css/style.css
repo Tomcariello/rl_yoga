@@ -27,9 +27,15 @@ a {
 	text-decoration: none;
 }
 
-.navbar-default .navbar-nav>li>a:hover, .navbar-default .navbar-nav>li>a:focus {
+.navbar-default .navbar-nav>li>a:hover, .navbar-default .navbar-nav>li>a:focus, .navbar-default .navbar-nav>li>a:hover, .navbar-default .navbar-nav>li>a:focus {
     color: #3e3f3a;
     background-color: transparent;
+}
+
+.navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
+    color: #3e3f3a;
+    background-color: transparent;
+	border-bottom: 2px solid #ffffff;
 }
 
 .navbar-settings {
@@ -93,7 +99,6 @@ p {
 }
 
 .aboutme {
-	padding: 0 0 20px 0;
 	width: 100%;
 }
 .connect {
@@ -183,14 +188,16 @@ textarea {
 }
 
 button {
-	background-color: #4aaaa5;
-	border: none;
-	padding: 8px 16px;
-	margin: 10px 5px;
+    background-color: #ffffff;
+    color: #263333;
+	border: 1px solid #cccccc;
+    margin: 10px 5px;
+    font-style: normal;
+    padding: 10px 20px;
 }
 
 button:hover {
-	background-color: #6cccc7;
+	opacity: .8;
 }
 
 .panel-heading {
@@ -256,3 +263,9 @@ button:hover {
  .yogavideo {
 	 margin-bottom: 10px;
  }
+
+ .carousel-caption.d-none.d-md-block {
+    background-color: #ffffff;
+    opacity: .9;
+    color: #000000;
+}

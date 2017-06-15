@@ -20,14 +20,17 @@ router.get('/', function(req, res) {
 });
 
 router.get('/index', function(req, res) {
+  res.render('index');
+});
+
+router.get('/about', function(req, res) {
     models.AboutMe.findOne({
     where: {id: 1}
   })
   .then(function(data) {
     var payload = {aboutmedata: data}
-    res.render('index', {aboutmedata: payload.aboutmedata});
+    res.render('about', {aboutmedata: payload.aboutmedata});
   })
-
 });
 
 router.get('/schedule', function (req, res) {
@@ -131,7 +134,7 @@ router.post('/contact/message', function(req, res) {
   //Send email to alert the admin that a message was recieved
   var mailOptions = {
       from: 'contact@tomcariello.com', // sender address
-      to: 'tomcariello@gmail.com', // list of receivers
+      to: 'raechel.lutz@gmail.com', // list of receivers
       subject: 'Someone left you a message', // Subject line
       text: 'Name: ' + req.body.fname + '\n Message: ' + req.body.message
   };
