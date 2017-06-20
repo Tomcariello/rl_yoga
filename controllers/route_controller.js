@@ -267,10 +267,27 @@ router.post('/newCarousel', function(req, res) {
   res.redirect('../admincarousel');
 });
 
-router.post('/updateCarousel', function(req, res) {
+
+router.post('/updateCarousel', isLoggedIn, upload.single('carouselPicture'), function(req, res) {
+
+  var carouselImageToUpload;
+
+  //Check if image was upload & process it
+  if (typeof req.file !== "undefined") {
+    var tempImagePath  = req.file.path;
+    var destinationPath = 'public/images/' + req.file.originalname;
+
+    var imageSource = fs.createReadStream(tempImagePath);
+    var imageDestination = fs.createWriteStream(destinationPath);
+    imageSource.pipe(imageDestination);
+
+    carouselImageToUpload = "/images/" + req.file.originalname;
+  } else {
+    carouselImageToUpload = req.body.carouselImage; //carousel image was unchaged
+  }
 
   //Parse data from form & generate query string
-  var queryString = 'Update carousels SET imagepath="' + req.body.carouselImage + '", quote="'+  req.body.carouselQuote + '", quotesource="' + req.body.carouselSource + '", updatedAt=CURDATE() WHERE id="' +  req.body.dbid + '"';
+  var queryString = 'Update carousels SET imagepath="' + carouselImageToUpload + '", quote="'+  req.body.carouselQuote + '", quotesource="' + req.body.carouselSource + '", updatedAt=CURDATE() WHERE id="' +  req.body.dbid + '"';
 
   //Run SQL query to add data to table
   connection.query(queryString, function (err, result) {
