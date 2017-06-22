@@ -1,55 +1,57 @@
 <section class="main">
   <div class='row linktoportal'>
-    <div class="col-sm-12">
+    <div class="col-sm-12 messageText">
       <a href="adminportal">
         <button>Return to Admin Portal</button>
       </a>
     </div>
   </div>
-  <div class='row'>
+  <div class='row pageTitle'>
     <div class="col-sm-12">
           <h3>Message Activity</h3>
     </div>
   </div>
-  <div class="messageDisplay">
-    <div class="row">
-      <div class="col-xs-1">
-      </div>
-      <div class="col-xs-2">
-        <h3>Date</h3>
-      </div>
-      <div class="col-xs-2">
-        <h3>Name</h3>
-      </div>
-      <div class="col-xs-2">
-        <h3>E-Mail</h3>
-      </div>
-      <div class="col-xs-5">
-        <h3>Message</h3>
-      </div>
-    </div>
-
-    {{#each messagedata}}
-      <hr>
+  <div class="row messageDisplay">
+    <div class="col-xs-12">
       <div class="row">
-        <div class="col-xs-1 deleteColumn">
-          <a href="deletemessage/{{this.id}}">
-            <i class="fa fa-times-circle" aria-hidden="true"></i>
-          </a>
+        <div class="col-xs-1">
         </div>
         <div class="col-xs-2">
-          {{this.createdAt}}
+          <h3>Date</h3>
         </div>
         <div class="col-xs-2">
-          {{this.name}}
+          <h3>Name</h3>
         </div>
         <div class="col-xs-2">
-          {{this.email}}
+          <h3>E-Mail</h3>
         </div>
         <div class="col-xs-5">
-          {{this.message}}
+          <h3>Message</h3>
         </div>
       </div>
-    {{/each}}
+
+      {{#each messagedata}}
+        <hr>
+        <div class="row">
+          <div class="col-xs-1 deleteColumn">
+            <a href="deletemessage/{{this.id}}">
+              <i class="fa fa-times-circle" aria-hidden="true"></i>
+            </a>
+          </div>
+          <div class="col-xs-2 messageText">
+            {{this.createdAt}}
+          </div>
+          <div class="col-xs-2 messageText">
+            {{this.name}}
+          </div>
+          <div class="col-xs-2 messageText">
+            {{this.email}}
+          </div>
+          <div class="col-xs-5 messageText">
+            {{this.message}}
+          </div>
+        </div>
+      {{/each}}
+    </div>
   </div>
 </section>

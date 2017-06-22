@@ -1,14 +1,29 @@
 <section class="main">
   <div class='row'>
     <div class="col-sm-12 loginform">
-      <h3>
+      <div class="pageTitle">
         Administrative Login
-        <hr>
-      </h3>
+      </div>
+
       <form action="login" method="POST">
-        <p>E-mail:</p><input type="text" id="email" name="email"  placeholder="example@gmail.com">
-        <p>Password:</p><input type="password" id="password" name="password"></textarea>
-        <p><button type="submit">Login</button></p>
+        <div class='row'>
+          <div class="col-xs-3 formLabel">
+            E-mail:
+          </div>
+          <div class="col-xs-6">
+            <input class="formInput" type="text" id="email" name="email"  placeholder="example@gmail.com">
+          </div>
+        </div>
+        <div class='row'>
+          <div class="col-xs-3 formLabel">
+            Password:
+          </div>
+          <div class="col-xs-6">
+            <input class="formInput"  type="password" id="password" name="password"></textarea>
+          </div>
+        </div>
+          
+        <button type="submit">Login</button>
       </form>
     </div>
   </div>

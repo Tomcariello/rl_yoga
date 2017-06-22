@@ -6,101 +6,101 @@
         </a>
     </div>
   </div>
-  <div class='row'>
-    <div class="col-sm-12">
-      <h1>
+  <div class='row pageTitle'>
+    <div class="col-sm-11">
         Carousel Administration
-      </h1>
-      <hr>
-      <h2>Add New Carousel Object
-        <i class="fa fa-plus-square" id="addnewproject"></i>
-      </h2>
-      <hr>
-
-      <h2>
-        Update Carousel Objects
-      </h2>
-      <hr>
-            {{#each carouseldata}}
-              <div class="row">
-                <form enctype="multipart/form-data" action="updateCarousel" method="POST">
-                  <div class="adminImageArea col-md-5">
-                    
-                    <input type="file" name="carouselPicture" id="carouselPicture">
-                    
-                    <input type="hidden" id="carouselImage" name="carouselImage" value="{{this.imagepath}}"/>
-                    <div class='row'>
-                      <div class='col-xs-3'>
-                        <p>Quote:</p>
-                      </div>
-                      <div class='col-xs-9'>
-                        <input class="carouselInput" type="text" id="carouselQuote" name="carouselQuote" value="{{this.quote}}"/>
-                      </div>
-                    </div>
-                    <div class='row'>
-                      <div class='col-xs-3'>
-                        <p>Attribution:</p>
-                      </div>
-                      <div class='col-xs-9'>
-                        <input class="carouselInput" type="text" id="carouselSource" name="carouselSource" value="{{this.quotesource}}"/>
-                      </div>
-                    </div>
-                    <input type="hidden" id="dbid" name="dbid" value="{{this.id}}"/>
-                    
-                    <p>
-                    <button type="submit" id="update">Update</button>
-                    <a href="deleteCarousel/{{this.id}}">
-                        <button type="button" id="delete">Delete</button>
-                    </a>
-                    </p>
-                  </div>
-
-                  <div class="adminTextArea col-md-7">
-                      <img class="carouselPreview" src="{{this.imagepath}}">
-                  </div>
-                </form>
-            </div>
-            <div class="row">
-                <div class="cols-sm-12">
-                <hr/>
-                </div>
-            </div>
-            {{/each}}
-
-              <Br/><Br/><Br/><Br/>
-        </div>
-      </div>
+    </div>
+    <div class="col-sm-1">
+      <i class="fa fa-plus-square" id="addnewproject"></i>
     </div>
   </div>
+  <div class='row'>
+    <div class="col-xs-12">
+      <hr>
+    </div>
+  </div>
+        
+  {{#each carouseldata}}
+    <div class="row">
+      <form enctype="multipart/form-data" action="updateCarousel" method="POST">
+        <div class="adminImageArea col-md-5">
+          
+          <input type="file" name="carouselPicture" id="carouselPicture">
+          
+          <input type="hidden" id="carouselImage" name="carouselImage" value="{{this.imagepath}}"/>
+          <div class='row'>
+            <div class='col-xs-3 formLabel'>
+              Quote:
+            </div>
+            <div class='col-xs-9'>
+              <input class="formInput" type="text" id="carouselQuote" name="carouselQuote" value="{{this.quote}}"/>
+            </div>
+          </div>
+          <div class='row'>
+            <div class='col-xs-3 formLabel'>
+              Attribution:
+            </div>
+            <div class='col-xs-9'>
+              <input class="formInput" type="text" id="carouselSource" name="carouselSource" value="{{this.quotesource}}"/>
+              <input type="hidden" id="dbid" name="dbid" value="{{this.id}}"/>
+            </div>
+          </div>
+
+          <button type="submit" id="update">Update</button>
+          <a href="deleteCarousel/{{this.id}}">
+              <button type="button" id="delete">Delete</button>
+          </a>
+        </div>
+
+        <div class="adminTextArea col-md-7">
+            <img class="carouselPreview" src="{{this.imagepath}}">
+        </div>
+      </form>
+    </div>
+
+    <div class="row">
+      <div class="cols-sm-12">
+        <hr/>
+      </div>
+    </div>
+  {{/each}}
+
 
   <!-- Modal -->
   <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
-
-      <!-- Modal content-->
       <div class="modal-content">
-        <div class="modal-header">
+        <div class="modal-header pageTitle">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4>Add New Carousel Object</h4>
+          Add New Carousel Object
         </div>
         
         <div class="modal-body">
           <form enctype="multipart/form-data" action="newCarousel" method="POST">
             
             <input type="file" name="carouselPicture" id="carouselPicture">
-            {{!--<p>Image:</p><input type="text" id="NewImage" name="NewImage"/>--}}
-            <p>Quote:</p><input type="text" id="NewQuote" name="NewQuote"/> 
-            <p>Attribution:</p><input type="text" id="NewSource" name="NewSource"/> 
-            <p>
+            
+            <div class="row">
+              <div class="col-xs-3 formLabel">
+                Quote: 
+              </div>
+              <div class="col-xs-9 ">
+                <input class="formInput" type="text" id="NewQuote" name="NewQuote"/> 
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-3 formLabel">
+                Attribution: 
+              </div>
+              <div class="col-xs-9">
+                <input class="formInput" type="text" id="NewSource" name="NewSource"/> 
+              </div>
+            </div>
               <button type="submit" id="update">Submit</button>
               <button type="cancel" id="cancel" data-dismiss="modal">Cancel</button>
-            </p>
           </form>
         </div>
       </div>
     </div>
   </div> 
-
-
-
 </section>

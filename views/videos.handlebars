@@ -1,24 +1,23 @@
 <section class="main">
-  <div class='row'>
+  <div class='row pageTitle'>
     <div class="col-sm-12">
-      <p>
         Videos
-      </p>
     </div>
   </div>
 
   <div class='row'>
     {{#each videodata}}
-  
-    
+     
       <div class="col-xs-12 col-md-5 yogavideo">
-          <p>
-            {{this.videoname}}
-          </p>
-          <iframe src="{{this.url}}" frameborder="0" allowfullscreen></iframe>
-          <p>
-            {{this.description}}
-          </p>
+        <iframe src="{{this.url}}" frameborder="0" allowfullscreen></iframe><br/>
+        <div class="videoTitle">
+          {{this.videoname}}
+        </div>
+        <div class="videoDescription">
+          {{this.description}}
+        </div>
+      </div>
+      <div class="col-xs-0 col-md-1">
       </div>
     {{/each}}
 

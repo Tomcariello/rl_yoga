@@ -1,27 +1,61 @@
 <section class="main">
   <div class='row'>
-    <div class="col-xs-12 sectionHeader">
-      <h2>Contact</h2>
+    <div class="col-xs-12 pageTitle">
+      Contact
     </div>
   </div>
-  <div class='row'>
-    <div class="col-xs-12 aboutme">
-      {{!-- <form class="create-update-form" action="burgers/create" method="POST"> --}}
-      <form action="contact/message" method="POST">
-        <p>Name:</p><input type="text" id ="fname" name="fname"  placeholder="John Smith">
-        <p>E-mail:</p><input type="text" id="email" name="email"  placeholder="example@gmail.com">
-        <p>Reason:</p>
-          <select id="reason" name="reason">
-            <option>--</option>
-            <option value="1">General Inquiry</option>
-            <option value="2">Request a lesson</option>
-            <option value="3">Reason 3</option>
-            <option value="4">Reason 4</option>
-          </select>
-        <p>Message:</p><textarea id="message" name="message"></textarea>
-        <p><button type="submit">Submit</button></p>
-      </form>
+
+  <form action="contact/message" method="POST">
+
+    <div class='row'>
+      <div class="col-xs-2 formLabel">
+        Name:
+      </div>
+      <div class="col-xs-8">
+        <input class="formInput" type="text" id ="fname" name="fname"  placeholder="John Smith">
+      </div>
+    </div>
+
+    <div class='row'>
+      <div class="col-xs-2 formLabel">
+        E-mail:
+      </div>
+      <div class="col-xs-8">
+        <input class="formInput" type="text" id="email" name="email"  placeholder="example@gmail.com">
+      </div>
+    </div>
+
+    <div class='row'>
+      <div class="col-xs-2 formLabel">
+        Reason:
+      </div>
+      <div class="col-xs-8">
+        <select class="formInput" id="reason" name="reason">
+          <option>--</option>
+          <option value="1">General Inquiry</option>
+          <option value="2">Request a lesson</option>
+          <option value="3">Reason 3</option>
+          <option value="4">Reason 4</option>
+        </select>
+      </div>
+    </div>
     
+    <div class='row'>
+      <div class="col-xs-2 formLabel">
+        Message:
+      </div>
+      <div class="col-xs-10">
+        <textarea class="formInput" id="message" name="message"></textarea>
+      </div>
     </div>
-  </div>
+    
+    <div class='row'>
+      <div class="col-xs-2 formLabel">
+      </div>
+      <div class="col-xs-10">
+        <button type="submit">Submit</button>
+      </div>
+    </div>
+  </form>
+    
 </section>
