@@ -1,51 +1,85 @@
 <section class="main">
   <div class='row linktoportal'>
     <div class="col-sm-12">
-      <a href="adminportal">Return to Admin Portal</a>
+      <a href="adminportal">
+        <button>Return to Admin Portal</button>
+      </a>
     </div>
   </div>
   <div class='row'>
     <div class="col-sm-12">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3>Video Object Administration</h3>
+      <h3>Video Object Administration</h3>
+    </div>
+  </div>
+
+  <div class='row'>
+    <div class="col-sm-12">
+      <hr>      
+        <h2>Add New Video
+          <i class="fa fa-plus-square" id="addnewproject"></i>
+        </h2>
+      <hr>
+    </div>
+  </div>
+  <div class='row'>
+    <div class="col-sm-12">
+      <h2>Update Existing Videos</h2>
+      <hr>
+    </div>
+  </div>
+
+  {{#each videodata}}
+    <div class="row">
+      <div class="col-sm-12 VideoTitleText">
+        {{this.videoname}}
+      </div>
+    </div>
+
+    <div class="row">
+      <form action="updatevideo" method="POST">
+        <div class="col-sm-6">
+          <div class="row">
+            <div class="col-sm-3">
+              <p>Video Name:</p>
+            </div>
+            <div class='col-sm-9'>
+              <input type="text" id="videoname" name="videoname" value="{{this.videoname}}"/>
+            </div>
+          </div>
+          <div class='row'>
+            <div class="col-sm-3">
+              <p>Description:</p>
+            </div>
+            <div class="col-sm-9">
+              <input type="text" id="description" name="description" value="{{this.description}}"/> 
+            </div>
+          </div>
+          <div class='row'>
+            <div class="col-sm-3">
+              <p>URL:</p>
+            </div>
+            <div class="col-sm-9">
+              <input type="text" id="url" name="url" value="{{this.url}}"/> 
+              <input type="hidden" id="dbid" name="dbid" value="{{this.id}}"/>
+            </div>
+          </div>         
+          
+          <div class='row'>
+            <div class="col-xs-12">
+              <button type="submit" id="update">Update</button>
+              <a href="deletevideos/{{this.id}}">
+                <button type="button" id="delete">Delete</button>
+              </a>
+            </div>
+          </div>
         </div>
-        <div class="panel-body">
-          <h2>Add New Video
-            <i class="fa fa-plus-square" id="addnewproject"></i>
-          </h2>
-          <hr>
 
-          <h2>Update Existing Videos</h2>
-          <hr>
-            {{#each videodata}}
-              <div class="row">
-                <div class="col-sm-12">
-                  <div class="panel panel-default">
-                    <div class="panel-heading portfoliotitle">
-                      <span class="portfoliotitletext">{{this.Name}}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+        <div clas='col-sm-6'>
+          <iframe src="{{this.url}}" frameborder="0" allowfullscreen></iframe>
+        </div>
+      </form>
+    </div>
 
-              <div class="row">
-                <div class="col-sm-6">
-                  <form action="updatevideo" method="POST">
-                    <p>Video Name:</p><input type="text" id="videoname" name="videoname" value="{{this.videoname}}"/>
-                    <p>Description:</p><input type="text" id="description" name="description" value="{{this.description}}"/> 
-                    <p>URL:</p><input type="text" id="url" name="url" value="{{this.url}}"/> 
-                    <input type="hidden" id="dbid" name="dbid" value="{{this.id}}"/>
-                    
-                    <p>
-                      <button type="submit" id="update" class="btn btn-primary">Update</button>
-                      <a href="deletevideos/{{this.id}}">
-                        <button type="button" id="delete" class="btn btn-danger">Delete</button>
-                      </a>
-                    </p>
-                  </form>
-                </div>
-              </div>
               <div class="row">
                 <div class="cols-sm-12">
                   <hr/>

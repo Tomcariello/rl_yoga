@@ -247,9 +247,10 @@ button:hover {
 .portfoliotitletext {
 	font-size: 26px;
 }
-#AboutMeBio {
+#AboutMeBio, #biotext {
     width: 500px;
     height: 500px;
+	font-size: 21px;
 }
 #AboutMeImage. #BioImage {
 	width: 90%;
@@ -309,6 +310,35 @@ hr {
    max-width: 300px;
 }
 
-#delete {
+#delete, #cancel {
 	background-color: #fd8585;
+}
+#NewImage, #NewQuote, #NewSource {
+	width: 75%;
+}
+.carouselInput, #videoname, #description, #url {
+    width: 90%;
+    margin: 5px;
+    font-size: 20px;
+}
+#carouselPicture {
+    margin: 10px 0;
+}
+.fa-times-circle:before {
+    font-size: 22px;
+	color: #d25b5b;
+}
+.deleteColumn {
+	text-align: center;
+}
+.messageDisplay {
+	background-color: #ffffff;
+}
+.CMSImage {
+	max-width: 300px;
+}
+
+.VideoTitleText {
+	margin: 10px 0;
+	font-size: 26px;
 }

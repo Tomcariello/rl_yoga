@@ -1,0 +1,90 @@
+<section class="main">
+  <div class='row linktoportal'>
+    <div class="col-sm-12">
+      <a href="adminportal">
+        <button>Return to Admin Portal</button>
+      </a>
+    </div>
+  </div>
+  <div class='row'>
+    <div class="col-sm-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3>Schedule Administration</h3>
+        </div>
+        <div class="panel-body">
+          <h2>Add New Video
+            <i class="fa fa-plus-square" id="addnewproject"></i>
+          </h2>
+          <hr>
+
+          <h2>Update Existing Videos</h2>
+          <hr>
+            {{#each videodata}}
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="panel panel-default">
+                    <div class="panel-heading portfoliotitle">
+                      <span class="portfoliotitletext">{{this.Name}}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm-6">
+                  <form action="updatevideo" method="POST">
+                    <p>Video Name:</p><input type="text" id="videoname" name="videoname" value="{{this.videoname}}"/>
+                    <p>Description:</p><input type="text" id="description" name="description" value="{{this.description}}"/> 
+                    <p>URL:</p><input type="text" id="url" name="url" value="{{this.url}}"/> 
+                    <input type="hidden" id="dbid" name="dbid" value="{{this.id}}"/>
+                    
+                    <p>
+                      <button type="submit" id="update" class="btn btn-primary">Update</button>
+                      <a href="deletevideos/{{this.id}}">
+                        <button type="button" id="delete" class="btn btn-danger">Delete</button>
+                      </a>
+                    </p>
+                  </form>
+                </div>
+              </div>
+              <div class="row">
+                <div class="cols-sm-12">
+                  <hr/>
+                </div>
+              </div>
+            {{/each}}
+
+              <Br/><Br/><Br/><Br/>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4>Add New Video</h4>
+        </div>
+        
+        <div class="modal-body">
+          <form action="newvideo" method="POST">
+            <p>Name:</p><input type="text" id="NewVideoName" name="NewVideoName"/>
+            <p>Description:</p><input type="text" id="NewDescription" name="NewDescription"/> 
+            <p>URL:</p><input type="text" id="NewVideoURL" name="NewVideoURL"/> 
+            <p><button type="submit" id="update">Submit</button></p>
+            <p><button type="cancel" id="cancel" data-dismiss="modal">Cancel</button></p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div> 
+
+
+
+</section>

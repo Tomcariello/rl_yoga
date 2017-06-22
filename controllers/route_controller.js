@@ -108,6 +108,14 @@ router.get('/admincarousel', isLoggedIn, function(req, res) {
   })
 
 });
+
+router.get('/adminschedule', isLoggedIn, function(req, res) {
+  res.render('adminschedule');
+});
+
+
+
+
 //Delete Video Object
 router.get('/deletevideos/:projectid', isLoggedIn, function(req, res) {
 
@@ -117,6 +125,17 @@ router.get('/deletevideos/:projectid', isLoggedIn, function(req, res) {
     if (err) throw err;
   });
   res.redirect('../adminvideos');
+})
+
+//Delete Message
+router.get('/deletemessage/:projectid', isLoggedIn, function(req, res) {
+
+  var queryString = 'DELETE from messages WHERE id=' + req.params.projectid + ';';
+
+  connection.query(queryString, function (err, result) {
+    if (err) throw err;
+  });
+  res.redirect('../viewmessages');
 })
 
 //Delete Video Object
@@ -146,7 +165,7 @@ router.post('/login', passport.authenticate('local-login', {
   failureRedirect: ('login') //if failed, redirect to login page (consider options here!!)
 }));
 
-router.post('/contact/message', function(req, res) {
+router.post('/contact/message', isLoggedIn, function(req, res) {
   //Parse data from form & generate query string
   var queryString = 'INSERT INTO messages (name, email, message, createdAt, updatedAt) VALUES ("' + req.body.fname + '", "' + req.body.email + '", "' + req.body.message + '", CURDATE(), CURDATE())';
 
@@ -228,7 +247,7 @@ router.post('/updateAboutMe', isLoggedIn, upload.any(), function(req, res) {
   res.redirect('../adminaboutme');
 });
 
-router.post('/newvideo', function(req, res) {
+router.post('/newvideo', isLoggedIn, function(req, res) {
 
   //Parse data from form & generate query string
   var queryString = 'INSERT INTO videos (videoname, description, url, createdAt, updatedAt) VALUES ("' + req.body.NewVideoName + '", "' + req.body.NewDescription + '", "' + req.body.NewVideoURL + '", CURDATE(), CURDATE())';
@@ -241,7 +260,7 @@ router.post('/newvideo', function(req, res) {
   res.redirect('../adminvideos');
 });
 
-router.post('/updatevideo', function(req, res) {
+router.post('/updatevideo', isLoggedIn, function(req, res) {
 
   //Parse data from form & generate query string
   var queryString = 'Update videos SET videoname="' + req.body.videoname + '", description="'+  req.body.description + '", url="' + req.body.url + '", updatedAt=CURDATE() WHERE id="' +  req.body.dbid + '"';
@@ -254,10 +273,25 @@ router.post('/updatevideo', function(req, res) {
   res.redirect('../adminvideos');
 });
 
-router.post('/newCarousel', function(req, res) {
+router.post('/newCarousel', isLoggedIn, upload.single('carouselPicture'), function(req, res) {
 
+  var carouselImageToUpload;
+
+  //Check if image was upload & process it
+  if (typeof req.file !== "undefined") {
+    var tempImagePath  = req.file.path;
+    var destinationPath = 'public/images/' + req.file.originalname;
+
+    var imageSource = fs.createReadStream(tempImagePath);
+    var imageDestination = fs.createWriteStream(destinationPath);
+    imageSource.pipe(imageDestination);
+
+    carouselImageToUpload = "/images/" + req.file.originalname;
+  } else {
+    carouselImageToUpload = req.body.carouselImage; //carousel image was unchaged
+  }
   //Parse data from form & generate query string
-  var queryString = 'INSERT INTO carousels (imagepath, quote, quotesource, createdAt, updatedAt) VALUES ("' + req.body.NewImage + '", "' + req.body.NewQuote + '", "' + req.body.NewSource + '", CURDATE(), CURDATE())';
+  var queryString = 'INSERT INTO carousels (imagepath, quote, quotesource, createdAt, updatedAt) VALUES ("' + carouselImageToUpload + '", "' + req.body.NewQuote + '", "' + req.body.NewSource + '", CURDATE(), CURDATE())';
 
   //Run SQL query to add data to table
   connection.query(queryString, function (err, result) {
@@ -312,7 +346,6 @@ function isLoggedIn(req, res, next) {
 
 function sendAutomaticEmail(mailOptions, req, res) {
   transporter.sendMail(mailOptions, function(error, info){
-    console.log(mailOptions);
     if(error){
         console.log(error);
     } else {
