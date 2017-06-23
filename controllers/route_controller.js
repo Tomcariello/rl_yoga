@@ -33,6 +33,11 @@ router.get('/about', function(req, res) {
   })
   .then(function(data) {
     var payload = {aboutmedata: data}
+
+
+    //Add Admin record to object
+    //payload.aboutmedata["administrator"] = true;
+
     res.render('about', {aboutmedata: payload.aboutmedata});
   })
 });
@@ -85,7 +90,11 @@ router.get('/adminaboutme', isLoggedIn, function(req, res) {
     where: {id: 1}
   })
   .then(function(data) {
-    var payload = {aboutmedata: data}
+    var payload = {aboutmedata: data};
+
+    //Add Admin record to object 
+    //payload.aboutmedata["administrator"] = true;
+
     res.render('adminaboutme', {aboutmedata: payload.aboutmedata});
   })
 });
