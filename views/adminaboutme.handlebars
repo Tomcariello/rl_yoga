@@ -1,21 +1,5 @@
 <section class="main">
 
-  <div class='row linktoportal'>
-    <div class="col-sm-12">
-      <a href="adminportal">
-        <button>Return to Admin Portal</button>
-      </a>
-    </div>
-  </div>
-
-
-              {{#if aboutmedata.administrator}}
-                status found 
-              {{else}}
-                status not found
-              {{/if}}
-
-
   <div class='row pageTitle'>
     <div class="col-sm-12">
         About Me Administration
@@ -32,16 +16,16 @@
     </div>  
     <div class="row">
       <div class="adminImageArea col-md-5">
-        <img class='CMSImage' src="{{aboutmedata.aboutimage}}">
+        <img class='CMSImage' src="{{dynamicData.aboutimage}}">
         <input type="file" name="profilepicture" id="profilepicture">
-        {{!--<input type="text" id="AboutMeImage" name="AboutMeImage" value="{{aboutmedata.aboutimage}}"/> --}}
+        {{!--<input type="text" id="AboutMeImage" name="AboutMeImage" value="{{dynamicData.aboutimage}}"/> --}}
         <p>
           {{!--<button type="submit" id="update" class="btn btn-primary">Update About Me</button>--}}
         </p>
       </div>
 
       <div class="adminTextArea col-md-7">
-        <textarea rows="4" cols="50" id="AboutMeBio" name="AboutMeBio" maxlength="2000">{{aboutmedata.about}}</textarea> 
+        <textarea rows="4" cols="50" id="AboutMeBio" name="AboutMeBio" maxlength="2000">{{dynamicData.about}}</textarea> 
       </div>
     </div>
 
@@ -52,13 +36,13 @@
     </div>
     <div class="row">
       <div class="adminImageArea col-md-5">
-        <img class='CMSImage'src="{{aboutmedata.bioimage}}">
+        <img class='CMSImage'src="{{dynamicData.bioimage}}">
         <input type="file" name="biopicture" id="biopicture">
-        {{!--<input type="text" id="BioImage" name="BioImage" value="{{aboutmedata.bioimage}}"/> --}}
+        {{!--<input type="text" id="BioImage" name="BioImage" value="{{dynamicData.bioimage}}"/> --}}
       </div>
 
       <div class="adminTextArea col-md-7">
-        <textarea rows="4" cols="50" id="biotext" name="biotext" maxlength="2000">{{aboutmedata.bio}}</textarea> 
+        <textarea rows="4" cols="50" id="biotext" name="biotext" maxlength="2000">{{dynamicData.bio}}</textarea> 
       </div>
 
     </div>

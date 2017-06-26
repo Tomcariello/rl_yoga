@@ -1,11 +1,4 @@
 <section class="main">
-  <div class='row linktoportal'>
-    <div class="col-sm-12">
-      <a href="adminportal">
-        <button>Return to Admin Portal</button>
-      </a>
-    </div>
-  </div>
   <div class='row pageTitle'>
     <div class="col-sm-11">
       Video Object Administration
@@ -15,7 +8,7 @@
     </div>
   </div>
 
-  {{#each videodata}}
+  {{#each dynamicData}}
     <div class="row">
       <div class="col-sm-12 VideoTitleText">
         {{this.videoname}}

@@ -58,7 +58,6 @@ router.get('/videos', function (req, res) {
     //Add administrator credential to the created object
     if (req.user) {
       payload.dynamicData["administrator"] = true;
-      console.log(payload)
     }
 
     res.render('videos', {dynamicData: payload.dynamicData});
@@ -106,8 +105,9 @@ router.get('/viewmessages', isLoggedIn, function(req, res) {
   //Pull message data from database
   models.Messages.findAll({})
   .then(function(data) {
-    var payload = {messagedata: data}
-    res.render('viewmessages', {messagedata: payload.messagedata});
+    var payload = {dynamicData: data}
+    payload.dynamicData["administrator"] = true;
+    res.render('viewmessages', {dynamicData: payload.dynamicData});
   })
 });
 
@@ -117,30 +117,27 @@ router.get('/adminaboutme', isLoggedIn, function(req, res) {
     where: {id: 1}
   })
   .then(function(data) {
-    var payload = {aboutmedata: data};
-
-    //Add Admin record to object 
-    //payload.aboutmedata["administrator"] = true;
-
-    res.render('adminaboutme', {aboutmedata: payload.aboutmedata});
+    var payload = {dynamicData: data};
+    payload.dynamicData["administrator"] = true;
+    res.render('adminaboutme', {dynamicData: payload.dynamicData});
   })
 });
 
 router.get('/adminvideos', isLoggedIn, function(req, res) {
-  //pull portfolio/project data from database
   models.Videos.findAll({})
   .then(function(data) {
-    var payload = {videodata: data}
-    res.render('adminvideos', {videodata: payload.videodata});
+    var payload = {dynamicData: data}
+    payload.dynamicData["administrator"] = true;
+    res.render('adminvideos', {dynamicData: payload.dynamicData});
   })
 });
 
 router.get('/admincarousel', isLoggedIn, function(req, res) {
-  //pull carousel data from database
   models.Carousel.findAll({})
   .then(function(data) {
-    var payload = {carouseldata: data}
-    res.render('admincarousel', {carouseldata: payload.carouseldata});
+    var payload = {dynamicData: data}
+    payload.dynamicData["administrator"] = true;
+    res.render('admincarousel', {dynamicData: payload.dynamicData});
   })
 
 });
