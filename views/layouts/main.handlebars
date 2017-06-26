@@ -43,6 +43,10 @@
              </ul>
               
             <ul class="nav navbar-nav navbar-right">
+              {{#if dynamicData.administrator}}
+                <button class="launch">Admin</button>
+              {{/if}}
+
               <li><a href="/about">About</a></li>
               <li><a href="/schedule">Schedule</a></li>
               <li><a href="/videos">Videos</a></li>
@@ -54,11 +58,7 @@
 
     </header>
 
-
-
 		{{{ body }}}
-
-
 
 
     <div class="footer">
@@ -66,4 +66,5 @@
     </div>
 
   </div>
+
 </body>

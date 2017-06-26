@@ -1,5 +1,7 @@
 $( document ).ready(function() {
 
+	console.log("***************TEST*******************");
+
 	//Check registration form for validity as fields are populated
 	$("#fname" ).change(function() {
 	  validateRegistration();

@@ -22,8 +22,14 @@ router.get('/', function(req, res) {
 router.get('/index', function(req, res) {
     models.Carousel.findAll({})
   .then(function(data) {
-    var payload = {carouseldata: data}
-    res.render('index', {carouseldata: payload.carouseldata});
+    var payload = {dynamicData: data}
+
+    //Add administrator credential to the created object
+    if (req.user) {
+      payload.dynamicData["administrator"] = true;
+    }
+    
+    res.render('index', {dynamicData: payload.dynamicData});
   })
 });
 
@@ -32,13 +38,30 @@ router.get('/about', function(req, res) {
     where: {id: 1}
   })
   .then(function(data) {
-    var payload = {aboutmedata: data}
+    var payload = {dynamicData: data}
 
+    //Add administrator credential to the created object
+    if (req.user) {
+      payload.dynamicData["administrator"] = true;
+    }
 
-    //Add Admin record to object
-    //payload.aboutmedata["administrator"] = true;
+    res.render('about', {dynamicData: payload.dynamicData});
+  })
+});
 
-    res.render('about', {aboutmedata: payload.aboutmedata});
+router.get('/videos', function (req, res) {
+  //pull video data from database
+  models.Videos.findAll({})
+  .then(function(data) {
+    var payload = {dynamicData: data}
+
+    //Add administrator credential to the created object
+    if (req.user) {
+      payload.dynamicData["administrator"] = true;
+      console.log(payload)
+    }
+
+    res.render('videos', {dynamicData: payload.dynamicData});
   })
 });
 
@@ -46,17 +69,21 @@ router.get('/schedule', function (req, res) {
   res.render('schedule');
 });
 
-router.get('/videos', function (req, res) {
-  //pull video data from database
-  models.Videos.findAll({})
-  .then(function(data) {
-    var payload = {videodata: data}
-    res.render('videos', {videodata: payload.videodata});
-  })
-});
-
 router.get('/contact', function(req, res) {
-  res.render('contact');
+
+  var payload = {
+    dynamicData: {
+      administrator: false
+    }
+  }
+    
+  //Add administrator credential to the created object
+  if (req.user) {
+    payload.dynamicData.administrator = true;
+  }
+
+  res.render('contact', {dynamicData: payload.dynamicData});
+
 });
 
 router.get('/register', function(req, res) {

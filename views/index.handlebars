@@ -10,7 +10,7 @@
       <div id="heroCarousel" class="carousel slide" data-ride="carousel">
         <div class="carousel-inner" role="listbox">
 
-          {{#each carouseldata}}
+          {{#each dynamicData}}
             <div class="item   {{#if @first}}active{{/if}}">
               <img class="d-block img-fluid" src="{{this.imagepath}}" alt="First slide">
               <div class="carousel-caption d-none d-md-block">
