@@ -6,7 +6,6 @@
     </div>
   </div>
 
-
   <form enctype="multipart/form-data" action="updateAboutMe" method="POST">
 
     <div class='row'>
@@ -34,6 +33,7 @@
         <span class="titleText">Bio</span> (limit 2,000 characters)
       </div>
     </div>
+
     <div class="row">
       <div class="adminImageArea col-md-5">
         <img class='CMSImage'src="{{dynamicData.bioimage}}">
@@ -41,15 +41,10 @@
         {{!--<input type="text" id="BioImage" name="BioImage" value="{{dynamicData.bioimage}}"/> --}}
       </div>
 
+      {{!--<div id="editor" class="adminTextArea col-md-7 ">--}}
+  
       <div class="adminTextArea col-md-7">
         <textarea rows="4" cols="50" id="biotext" name="biotext" maxlength="2000">{{dynamicData.bio}}</textarea> 
-      </div>
-
-    </div>
-
-    <div class='row'>
-      <div class='col-xs-12'>
-        <hr>
       </div>
     </div>
 
@@ -60,4 +55,21 @@
     </div>
 
   </form>
+
+<link href="https://cdn.quilljs.com/1.2.6/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.quilljs.com/1.2.6/quill.js"></script>
+
+{{!--<!-- Initialize Quill editor -->
+<script>
+  
+
+  var quill = new Quill('#editor', {
+    theme: 'snow'
+  });
+
+{{!--quill.setText(0, 'test');--}}
+
+</script>--}}
+
+
 </section>
