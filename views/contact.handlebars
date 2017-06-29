@@ -7,6 +7,14 @@
 
   <form action="contact/message" method="POST">
 
+  {{#if dynamicData.messageSent}}
+    <div class='row'>
+      <div class="col-xs-12 messageSent">
+        Thank you for your message!
+      </div>
+    </div>
+  {{/if}}
+
     <div class='row'>
       <div class="col-xs-2 formLabel">
         Name:
@@ -53,7 +61,7 @@
       <div class="col-xs-2 formLabel">
       </div>
       <div class="col-xs-10">
-        <button type="submit">Submit</button>
+        <button id="contactSubmit" type="submit">Submit</button>
       </div>
     </div>
   </form>

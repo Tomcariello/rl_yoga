@@ -169,6 +169,10 @@ form > p {
 	margin: 0;
 }
 
+.formWarning {
+	border: 1px solid red;
+}
+
 #password, #email {
 	font-size: 22px;
 	margin-bottom: 20px;
@@ -357,4 +361,11 @@ hr {
     margin: 10px 0;
 	text-align: center;
 	border-top: 0;
+}
+
+.messageSent {
+    font-size: 28px;
+    text-align: center;
+    color: red;
+    margin-bottom: 17px;
 }
