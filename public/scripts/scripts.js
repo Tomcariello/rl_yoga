@@ -1,8 +1,34 @@
 $( document ).ready(function() {
 
-	console.log("***************TEST*******************");
+	//Check form for contents before submitting
+	$('#contactSubmit').on('click',function() {
+		
+		if ($('#fname').val() != "") {
+			$('#fname').removeClass('formWarning');
+			if ($('#email').val() != "") {
+				$('#email').removeClass('formWarning');
+				if ($('#reason').val() != "--") {
+					$('#reason').removeClass('formWarning');
+					if ($('#message').val() != "") {
+						$('#message').removeClass('formWarning');
+						return true;
+					} else{
+						$('#message').addClass('formWarning');
+					}
+				} else {
+					$('#reason').addClass('formWarning');
+				}
+			} else {
+				$('#email').addClass('formWarning');
+			}
+		} else {
+			$('#fname').addClass('formWarning');
+		}
+			
+	return false;
+	})
 
-	//Check registration form for validity as fields are populated
+	//listen to registration form for validity as fields are populated
 	$("#fname" ).change(function() {
 	  validateRegistration();
 	});
@@ -41,10 +67,8 @@ function clearFields() {
 }
 
 function validateRegistration() {
-	//if all fields not null and passwords match...
-	console.log('checking form');
 
-	//Write this code better
+	//Refactor this code
 	if ($("#fname" ).val() != "") {
 		if ($("#lname" ).val() != "") {
 			$("#lname").css({"border-color":"initial"});

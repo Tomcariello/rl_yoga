@@ -72,14 +72,23 @@ router.get('/contact', function(req, res) {
 
   var payload = {
     dynamicData: {
-      administrator: false
+      administrator: false,
+      messageSent: false
     }
+  }
+
+  //Add messageSent credential to the created object
+  if (req.session.messageSent) {
+    payload.dynamicData.messageSent = true;
+    req.session.messageSent = false;
   }
     
   //Add administrator credential to the created object
   if (req.user) {
     payload.dynamicData.administrator = true;
   }
+
+  console.log(payload.dynamicData);
 
   res.render('contact', {dynamicData: payload.dynamicData});
 
@@ -198,7 +207,7 @@ router.post('/login', passport.authenticate('local-login', {
   failureRedirect: ('login') //if failed, redirect to login page (consider options here!!)
 }));
 
-router.post('/contact/message', isLoggedIn, function(req, res) {
+router.post('/contact/message', function(req, res) {
   //Parse data from form & generate query string
   var queryString = 'INSERT INTO messages (name, email, message, createdAt, updatedAt) VALUES ("' + req.body.fname + '", "' + req.body.email + '", "' + req.body.message + '", CURDATE(), CURDATE())';
 
@@ -210,12 +219,13 @@ router.post('/contact/message', isLoggedIn, function(req, res) {
   //Send email to alert the admin that a message was recieved
   var mailOptions = {
       from: 'contact@tomcariello.com', // sender address
-      to: 'raechel.lutz@gmail.com', // list of receivers
+      to: 'tomcariello@gmail.com', // list of receivers
       subject: 'Someone left you a message', // Subject line
       text: 'Name: ' + req.body.fname + '\n Message: ' + req.body.message
   };
 
   sendAutomaticEmail(mailOptions);
+  req.session.messageSent = true;
 
   res.redirect('../contact');
 });
