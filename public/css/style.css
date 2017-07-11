@@ -369,3 +369,7 @@ hr {
     color: red;
     margin-bottom: 17px;
 }
+
+.hideElement {
+	display: none;
+}
