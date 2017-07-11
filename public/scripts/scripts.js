@@ -105,3 +105,11 @@ function validateRegistration() {
 function hideSubmitButton() {
 	$("#submitButton").css({"display":"none"});	
 }
+
+//Listen to update biop page submit button
+function validateUpdateBioForm() {
+		var textareaValue = $('#summernoteAboutMe').summernote('code');
+		$("#AboutMeBio").val(textareaValue);
+
+		return true;
+}

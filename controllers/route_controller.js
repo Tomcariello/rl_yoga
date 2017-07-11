@@ -87,16 +87,11 @@ router.get('/contact', function(req, res) {
   if (req.user) {
     payload.dynamicData.administrator = true;
   }
-
-  console.log(payload.dynamicData);
-
   res.render('contact', {dynamicData: payload.dynamicData});
-
 });
 
 router.get('/register', function(req, res) {
   res.render('register');
-  // res.redirect('/index');
 });
 
 router.get('/login', function(req, res) {

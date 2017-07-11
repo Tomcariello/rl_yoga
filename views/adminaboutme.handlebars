@@ -1,12 +1,15 @@
 <section class="main">
 
+  <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.4/summernote.css" rel="stylesheet">
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.4/summernote.js"></script>
+
   <div class='row pageTitle'>
     <div class="col-sm-12">
         About Me Administration
     </div>
   </div>
 
-  <form enctype="multipart/form-data" action="updateAboutMe" method="POST">
+  <form enctype="multipart/form-data" action="updateAboutMe" onsubmit="return validateUpdateBioForm()" method="POST">
 
     <div class='row'>
       <div class="col-sm-12">
@@ -20,9 +23,15 @@
         <input type="hidden" id="AboutMeImage" name="AboutMeImage" value="{{dynamicData.aboutimage}}"/> 
       </div>
 
-      <div class="adminTextArea col-md-7">
+      <div class="hideElement adminTextArea col-md-7">
         <textarea rows="4" cols="50" id="AboutMeBio" name="AboutMeBio" maxlength="2000">{{dynamicData.about}}</textarea> 
       </div>
+
+      <div class="col-md-7">
+        <div class="row">
+          <div id="summernoteAboutMe">
+        </div>
+        </div>
     </div>
 
     <div class='row'>
@@ -38,8 +47,14 @@
         <input type="hidden" id="BioImage" name="BioImage" value="{{dynamicData.bioimage}}"/> 
       </div>
 
-      <div class="adminTextArea col-md-7">
-        <textarea rows="4" cols="50" id="biotext" name="biotext" maxlength="2000">{{dynamicData.bio}}</textarea> 
+      <div class="hideElement adminTextArea col-md-7">
+        <textarea type="hidden" rows="4" cols="50" id="biotext" name="biotext" maxlength="2000">{{dynamicData.bio}}</textarea> 
+      </div>
+
+      <div class="col-md-7">
+        <div class="row">
+          <div id="summernoteBio">
+        </div>
       </div>
     </div>
 
@@ -51,5 +66,19 @@
 
   </form>
 
+ 
+ <script>
+    $(document).ready(function() {
+        $('#summernoteAboutMe').summernote();
+
+        var aboutMeContent = $("#AboutMeBio").val();
+        $('#summernoteAboutMe').summernote('code', aboutMeContent);
+
+        $('#summernoteBio').summernote();
+
+        var bioContent = $("#biotext").val();
+        $('#summernoteBio').summernote('code', bioContent);
+    });
+  </script>
 
 </section>
