@@ -53,6 +53,17 @@ $( document ).ready(function() {
 		$("#myModal").modal();
 	});
 
+
+	// $( "#adminAboutMForm" ).on( "submit", function( event ) {
+	// 	var textareaValue = $('#summernoteAboutMe').summernote('code');
+	// 	$("#AboutMeBio").val(textareaValue);
+
+	// 	var data = $( this ).serialize();
+
+	// 	return data;
+	// });
+
+
 });
 
 function clearFields() {
@@ -107,9 +118,10 @@ function hideSubmitButton() {
 }
 
 //Listen to update biop page submit button
-function validateUpdateBioForm() {
-		var textareaValue = $('#summernoteAboutMe').summernote('code');
-		$("#AboutMeBio").val(textareaValue);
+function validateUpdateBioForm(event) {
 
-		return true;
+	var textareaValue = $('#summernoteAboutMe').summernote('code');
+	$("#AboutMeBio").val(textareaValue);
+
+	return true;
 }

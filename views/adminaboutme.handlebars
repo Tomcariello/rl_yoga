@@ -9,7 +9,8 @@
     </div>
   </div>
 
-  <form enctype="multipart/form-data" action="updateAboutMe" onsubmit="return validateUpdateBioForm()" method="POST">
+  {{!-- <form enctype="multipart/form-data" action="updateAboutMe" onsubmit="return validateUpdateBioForm()" method="POST"> --}}
+  <form id="adminAboutMForm" eenctype="multipart/form-data" action="updateAboutMe" method="POST">
 
     <div class='row'>
       <div class="col-sm-12">
@@ -69,7 +70,16 @@
  
  <script>
     $(document).ready(function() {
-        $('#summernoteAboutMe').summernote();
+        $('#summernoteAboutMe').summernote({
+          toolbar: [
+              // [groupName, [list of button]]
+              ['style', ['bold', 'italic', 'underline', 'clear']],
+              ['font', ['strikethrough', 'superscript', 'subscript']],
+              ['fontsize', ['fontsize']],
+              ['para', ['ul', 'ol', 'paragraph']],
+              ['insert', ['link']]
+            ]
+        });
 
         var aboutMeContent = $("#AboutMeBio").val();
         $('#summernoteAboutMe').summernote('code', aboutMeContent);
