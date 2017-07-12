@@ -54,16 +54,6 @@ $( document ).ready(function() {
 	});
 
 
-	// $( "#adminAboutMForm" ).on( "submit", function( event ) {
-	// 	var textareaValue = $('#summernoteAboutMe').summernote('code');
-	// 	$("#AboutMeBio").val(textareaValue);
-
-	// 	var data = $( this ).serialize();
-
-	// 	return data;
-	// });
-
-
 });
 
 function clearFields() {
@@ -121,7 +111,9 @@ function hideSubmitButton() {
 function validateUpdateBioForm(event) {
 
 	var textareaValue = $('#summernoteAboutMe').summernote('code');
-	$("#AboutMeBio").val(textareaValue);
+	var data = encodeURI(textareaValue);
+
+	$("#AboutMeBio").val(data);
 
 	return true;
 }

@@ -9,8 +9,8 @@
     </div>
   </div>
 
-  {{!-- <form enctype="multipart/form-data" action="updateAboutMe" onsubmit="return validateUpdateBioForm()" method="POST"> --}}
-  <form id="adminAboutMForm" eenctype="multipart/form-data" action="updateAboutMe" method="POST">
+   <form enctype="multipart/form-data" action="updateAboutMe" onsubmit="return validateUpdateBioForm()" method="POST"> 
+  {{!-- <form id="adminAboutMForm" eenctype="multipart/form-data" action="updateAboutMe" method="POST"> --}}
 
     <div class='row'>
       <div class="col-sm-12">
@@ -82,7 +82,9 @@
         });
 
         var aboutMeContent = $("#AboutMeBio").val();
-        $('#summernoteAboutMe').summernote('code', aboutMeContent);
+        var decodedAboutMe = decodeURI(aboutMeContent);
+
+        $('#summernoteAboutMe').summernote('code', decodedAboutMe);
 
         $('#summernoteBio').summernote();
 
