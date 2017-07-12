@@ -40,6 +40,10 @@ router.get('/about', function(req, res) {
   .then(function(data) {
     var payload = {dynamicData: data}
 
+    //decode About data for proper rendering
+    var decodeAbout = decodeURIComponent(payload.dynamicData.about);
+    payload.dynamicData.about = decodeAbout;
+
     //Add administrator credential to the created object
     if (req.user) {
       payload.dynamicData["administrator"] = true;
