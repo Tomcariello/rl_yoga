@@ -44,6 +44,10 @@ router.get('/about', function(req, res) {
     var decodeAbout = decodeURIComponent(payload.dynamicData.about);
     payload.dynamicData.about = decodeAbout;
 
+    //decode Bio data for proper rendering
+    var decodeBio = decodeURIComponent(payload.dynamicData.bio);
+    payload.dynamicData.bio = decodeBio;
+
     //Add administrator credential to the created object
     if (req.user) {
       payload.dynamicData["administrator"] = true;

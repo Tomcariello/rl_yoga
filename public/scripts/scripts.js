@@ -107,13 +107,17 @@ function hideSubmitButton() {
 	$("#submitButton").css({"display":"none"});	
 }
 
-//Listen to update biop page submit button
+//Listen to update bio page submit button
 function validateUpdateBioForm(event) {
 
-	var textareaValue = $('#summernoteAboutMe').summernote('code');
-	var data = encodeURI(textareaValue);
+	var aboutmeFormattedData = $('#summernoteAboutMe').summernote('code');
+	var aboutmeEncodedData = encodeURI(aboutmeFormattedData);
 
-	$("#AboutMeBio").val(data);
+	var bioFormattedData = $('#summernoteBio').summernote('code');
+	var bioEncodedData = encodeURI(bioFormattedData);
+
+	$("#AboutMeBio").val(aboutmeEncodedData);
+	$("#biotext").val(bioEncodedData);
 
 	return true;
 }

@@ -10,7 +10,6 @@
   </div>
 
    <form enctype="multipart/form-data" action="updateAboutMe" onsubmit="return validateUpdateBioForm()" method="POST"> 
-  {{!-- <form id="adminAboutMForm" eenctype="multipart/form-data" action="updateAboutMe" method="POST"> --}}
 
     <div class='row'>
       <div class="col-sm-12">
@@ -61,7 +60,7 @@
 
     <div class="row">
         <div class='col-xs-12'>
-          <button type="submit" id="updatebio" >Update</button>
+          <button type="submit" id="updatebio">Update</button>
         </div>
     </div>
 
@@ -70,26 +69,40 @@
  
  <script>
     $(document).ready(function() {
-        $('#summernoteAboutMe').summernote({
-          toolbar: [
-              // [groupName, [list of button]]
-              ['style', ['bold', 'italic', 'underline', 'clear']],
-              ['font', ['strikethrough', 'superscript', 'subscript']],
-              ['fontsize', ['fontsize']],
-              ['para', ['ul', 'ol', 'paragraph']],
-              ['insert', ['link']]
-            ]
-        });
+      //Initialize Summernote for the About Me section
+      $('#summernoteAboutMe').summernote({
+        toolbar: [
+            // [groupName, [list of button]]
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['font', ['strikethrough', 'superscript', 'subscript']],
+            ['fontsize', ['fontsize']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['insert', ['link']]
+          ]
+      });
 
-        var aboutMeContent = $("#AboutMeBio").val();
-        var decodedAboutMe = decodeURI(aboutMeContent);
+      //Initialize Summernote for the Bio section
+      $('#summernoteBio').summernote({
+        toolbar: [
+            // [groupName, [list of button]]
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['font', ['strikethrough', 'superscript', 'subscript']],
+            ['fontsize', ['fontsize']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['insert', ['link']]
+          ]
+      });
 
-        $('#summernoteAboutMe').summernote('code', decodedAboutMe);
+      //Read coded contents & decode them
+      var aboutMeContent = $("#AboutMeBio").val();
+      var decodedAboutMe = decodeURI(aboutMeContent);
 
-        $('#summernoteBio').summernote();
+      var bioContent = $("#biotext").val();
+      var decodedbio = decodeURI(bioContent);
 
-        var bioContent = $("#biotext").val();
-        $('#summernoteBio').summernote('code', bioContent);
+      //Insert decoded text into the proper fields  
+      $('#summernoteAboutMe').summernote('code', decodedAboutMe);
+      $('#summernoteBio').summernote('code', decodedbio);
     });
   </script>
 
