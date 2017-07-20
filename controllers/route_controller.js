@@ -164,7 +164,7 @@ router.get('/adminschedule', isLoggedIn, function(req, res) {
 //Delete Video Object
 router.get('/deletevideos/:projectid', isLoggedIn, function(req, res) {
 
-  var queryString = 'DELETE from videos WHERE id=' + req.params.projectid + ';';
+  var queryString = 'DELETE from Videos WHERE id=' + req.params.projectid + ';';
 
   connection.query(queryString, function (err, result) {
     if (err) throw err;
@@ -183,7 +183,7 @@ router.get('/deletemessage/:projectid', isLoggedIn, function(req, res) {
   res.redirect('../viewmessages');
 })
 
-//Delete Video Object
+//Delete Carousel Object
 router.get('/deleteCarousel/:projectid', isLoggedIn, function(req, res) {
 
   var queryString = 'DELETE from Carousels WHERE id=' + req.params.projectid + ';';
@@ -296,7 +296,7 @@ router.post('/updateAboutMe', isLoggedIn, upload.any(), function(req, res) {
 router.post('/newvideo', isLoggedIn, function(req, res) {
 
   //Parse data from form & generate query string
-  var queryString = 'INSERT INTO videos (videoname, description, url, createdAt, updatedAt) VALUES ("' + req.body.NewVideoName + '", "' + req.body.NewDescription + '", "' + req.body.NewVideoURL + '", CURDATE(), CURDATE())';
+  var queryString = 'INSERT INTO Videos (videoname, description, url, createdAt, updatedAt) VALUES ("' + req.body.NewVideoName + '", "' + req.body.NewDescription + '", "' + req.body.NewVideoURL + '", CURDATE(), CURDATE())';
 
   //Run SQL query to add data to table
   connection.query(queryString, function (err, result) {

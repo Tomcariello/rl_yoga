@@ -1,6 +1,6 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
-  var Videos = sequelize.define('videos', {
+  var Videos = sequelize.define('Videos', {
     videoname: DataTypes.STRING,
     description: DataTypes.STRING,
     url: DataTypes.STRING,
