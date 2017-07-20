@@ -115,7 +115,7 @@ router.get('/adminportal', isLoggedIn, function(req, res) {
 
 router.get('/viewmessages', isLoggedIn, function(req, res) {
   //Pull message data from database
-  models.Messages.findAll({})
+  models.messages.findAll({})
   .then(function(data) {
     var payload = {dynamicData: data}
     payload.dynamicData["administrator"] = true;
