@@ -337,7 +337,7 @@ router.post('/newCarousel', isLoggedIn, upload.single('carouselPicture'), functi
     carouselImageToUpload = req.body.carouselImage; //carousel image was unchaged
   }
   //Parse data from form & generate query string
-  var queryString = 'INSERT INTO Carousel (imagepath, quote, quotesource, createdAt, updatedAt) VALUES ("' + carouselImageToUpload + '", "' + req.body.NewQuote + '", "' + req.body.NewSource + '", CURDATE(), CURDATE())';
+  var queryString = 'INSERT INTO Carousels (imagepath, quote, quotesource, createdAt, updatedAt) VALUES ("' + carouselImageToUpload + '", "' + req.body.NewQuote + '", "' + req.body.NewSource + '", CURDATE(), CURDATE())';
 
   //Run SQL query to add data to table
   connection.query(queryString, function (err, result) {
@@ -367,7 +367,7 @@ router.post('/updateCarousel', isLoggedIn, upload.single('carouselPicture'), fun
   }
 
   //Parse data from form & generate query string
-  var queryString = 'Update Carousel SET imagepath="' + carouselImageToUpload + '", quote="'+  req.body.carouselQuote + '", quotesource="' + req.body.cCrouselSource + '", updatedAt=CURDATE() WHERE id="' +  req.body.dbid + '"';
+  var queryString = 'Update Carousels SET imagepath="' + carouselImageToUpload + '", quote="'+  req.body.carouselQuote + '", quotesource="' + req.body.cCrouselSource + '", updatedAt=CURDATE() WHERE id="' +  req.body.dbid + '"';
 
   //Run SQL query to add data to table
   connection.query(queryString, function (err, result) {
