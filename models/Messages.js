@@ -1,6 +1,6 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
-  var Messages = sequelize.define('Messages', {
+  var messages = sequelize.define('messages', {
     name: DataTypes.STRING,
     email: DataTypes.STRING,
     message: DataTypes.STRING
@@ -11,5 +11,5 @@ module.exports = function(sequelize, DataTypes) {
     },
     freezeTableName: true
   });
-  return Messages;
+  return messages;
 };
