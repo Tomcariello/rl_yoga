@@ -17,7 +17,7 @@
 
     <div class="row">
       <form action="updatevideo" method="POST">
-        <div class="col-sm-6">
+        <div class="col-sm-8">
           <div class="row">
             <div class="col-sm-3  formLabel">
               Video Name:
@@ -31,7 +31,7 @@
               Description:
             </div>
             <div class="col-sm-9">
-              <input class="formInput" type="text" id="description" name="description" value="{{this.description}}"/> 
+              <input class="formInputLarge" type="text" id="description" name="description" value="{{this.description}}"/> 
             </div>
           </div>
           <div class='row'>
@@ -54,7 +54,7 @@
           </div>
         </div>
 
-        <div clas='col-sm-6'>
+        <div clas='col-sm-4'>
           <iframe src="{{this.url}}" frameborder="0" allowfullscreen></iframe>
         </div>
       </form>
