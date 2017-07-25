@@ -309,7 +309,7 @@ router.post('/newvideo', isLoggedIn, function(req, res) {
 router.post('/updatevideo', isLoggedIn, function(req, res) {
 
   //Parse data from form & generate query string
-  var queryString = 'Update videos SET videoname="' + req.body.videoname + '", description="'+  req.body.description + '", url="' + req.body.url + '", updatedAt=CURDATE() WHERE id="' +  req.body.dbid + '"';
+  var queryString = 'Update Videos SET videoname="' + req.body.videoname + '", description="'+  req.body.description + '", url="' + req.body.url + '", updatedAt=CURDATE() WHERE id="' +  req.body.dbid + '"';
 
   //Run SQL query to add data to table
   connection.query(queryString, function (err, result) {
