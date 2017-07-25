@@ -23,7 +23,7 @@
               Video Name:
             </div>
             <div class='col-sm-9'>
-              <textarea class="formInput" id="videoname" name="videoname" value="{{this.videoname}}"/>
+            <input class="formInput" id="videoname" name="videoname" value="{{this.videoname}}"/></textarea>
             </div>
           </div>
           <div class='row'>
@@ -31,7 +31,8 @@
               Description:
             </div>
             <div class="col-sm-9">
-              <input class="formInputLarge" type="text" id="description" name="description" value="{{this.description}}"/> 
+              {{!-- <input class="formInputLarge" type="text" id="description" name="description" value="{{this.description}}"/>  --}}
+              <textarea class="formInputLarge" type="text" id="description" name="description" value="temp"/>{{this.description}}</textarea>
             </div>
           </div>
           <div class='row'>

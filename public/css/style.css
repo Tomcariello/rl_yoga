@@ -277,7 +277,9 @@ button:hover {
  .carousel-caption.d-none.d-md-block {
     background-color: #ffffff;
     opacity: .9;
-    color: #000000;
+	color: #000000;
+	font-size: 22px;
+    margin: 0 15px;
 }
 
 .words {
