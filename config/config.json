@@ -18,9 +18,9 @@
     "password": "",
     "database": "",
     "host": "",
-    "dialect":"",
-    "protocol":"",
-    "port":""
+    "dialect":"mysql",
+    "protocol":"mysql",
+    "port":"3306"
   }
 
 }
