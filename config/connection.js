@@ -3,10 +3,10 @@
 var mysql = require('mysql');
 var connection;
 
+//If in heroku production environment, create connection based on that information
 if (process.env.JAWSDB_URL) {
-	console.log(process.env.JAWSDB_URL);
   connection = mysql.createConnection(process.env.JAWSDB_URL);
-} else {
+} else { //use local credentials
   connection = mysql.createConnection({
   	
     port: 3306,
