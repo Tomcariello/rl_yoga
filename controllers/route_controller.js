@@ -245,16 +245,29 @@ router.post('/updateAboutMe', isLoggedIn, upload.any(), function(req, res) {
 
     if (req.files.length == 1) {
 
-      //If 1st image uploaded was for ABOUT ME
+      //If image uploaded was for ABOUT ME
       if (req.files[0].fieldname == "profilepicture") {
+        //Add vars to contain name & destination
         var tempAboutMeImagePath  = req.files[0].path;
         var destinationPath = 'public/images/' + req.files[0].originalname;
 
+        //create file path & destination
         var imageSource = fs.createReadStream(tempAboutMeImagePath);
         var imageDestination = fs.createWriteStream(destinationPath);
+
+        //save image to destination
         imageSource.pipe(imageDestination);
 
+        //Save path to image to store in database
         aboutMeImageToUpload = "/images/" + req.files[0].originalname;
+
+
+        //Upload image to amazon S3
+
+        //Save path to image on AS3 to store in database
+
+
+        
       } else if (req.files[0].fieldname == "biopicture") {  //If image uploaded for Bio
         var tempBioImagePath  = req.files[0].path;
         var destinationPath = 'public/images/' + req.files[0].originalname;
