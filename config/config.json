@@ -17,7 +17,7 @@
     "username": "",
     "password": "",
     "database": "",
-    "host": "process.env.JAWSDB_URL",
+    "host": process.env.JAWSDB_URL,
     "dialect":"mysql",
     "protocol":"mysql",
     "port":"3306"
