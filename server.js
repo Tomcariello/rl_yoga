@@ -24,8 +24,6 @@ require('./config/passportConfig.js')(passport);
 // Serve static content for the app from the "public" directory in the application directory.
 app.use(express.static(__dirname + '/public'));
 
-
-
 app.use(cookieParser()); //read cookies
 
 app.use(bodyParser.urlencoded({ //read data from forms
@@ -45,7 +43,6 @@ require('./config/passportConfig.js');
 app.use(session({ secret: 'tomtest' })); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
-
 
 //Routes
 var routes = require('./controllers/route_controller.js');
