@@ -16,12 +16,12 @@ console.log("**************************************");
 console.log(connection.config);
 console.log("**************************************");
 //Assign Dev Environment Vars if in Dev environment
-// if (process.env.JAWSDB_URL) {
-//   connection.config.host = process.env.host;
-//   connection.config.user = process.env.username;
-//   connection.config.password = process.env.password;
-//   connection.config.database = process.env.database;
-// }
+if (process.env.JAWSDB_URL) {
+  connection.config.host = process.env.host;
+  connection.config.user = process.env.username;
+  connection.config.password = process.env.password;
+  connection.config.database = process.env.database;
+}
 
 console.log("**************************************");
 
