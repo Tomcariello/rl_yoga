@@ -14,10 +14,10 @@
     "dialect": "mysql"
   },
   "production": {
-    "username": process.env.username,
-    "password": process.env.password,
-    "database": process.env.database,
-    "host": process.env.host,
+    "username": "gyo4s07nostdnfur",
+    "password": "ejoeu1bin3e5c9xw",
+    "database": "s5elo92typoz08kp",
+    "host": "a07yd3a6okcidwap.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
     "dialect":"mysql",
     "protocol":"mysql",
     "port":"3306"
