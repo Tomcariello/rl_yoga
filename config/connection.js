@@ -6,10 +6,12 @@ var connection;
 //If in heroku production environment, create connection based on that information
 if (process.env.JAWSDB_URL) {
 	connection = mysql.createConnection(process.env.JAWSDB_URL);
-	connection.config.host = process.env.host;
-  connection.config.user = process.env.username;
-  connection.config.password = process.env.password;
-  connection.config.database = process.env.database;
+
+	//Not sure if the below is necessary....
+	// connection.config.host = process.env.host;
+  // connection.config.user = process.env.username;
+  // connection.config.password = process.env.password;
+  // connection.config.database = process.env.database;
 } else { //use local credentials
   connection = mysql.createConnection({
   	
