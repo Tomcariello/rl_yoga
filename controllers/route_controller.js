@@ -12,9 +12,9 @@ var multer  = require('multer');
 var upload = multer({dest: __dirname + '/public/images/'}); 
 var fs = require('fs');
 
-console.log('*************************');
-console.log(sequelizeConnection.config);
-console.log('*************************');
+// console.log('*************************');
+// console.log(sequelizeConnection.config);
+// console.log('*************************');
 
 //==================================
 //=====GET routes to load pages=====

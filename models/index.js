@@ -12,11 +12,12 @@ if (config.use_env_variable) {
   
   var sequelize = new Sequelize(process.env[config.use_env_variable]);
 
-  //Update to environmental variables
-  sequelize.config.database = process.env.database;
-  sequelize.config.username = process.env.username;
-  sequelize.config.password = process.env.password;
-  sequelize.config.host = process.env.host;
+  //Update to environmental variables to eliminate config.json
+  
+  // sequelize.config.database = process.env.database;
+  // sequelize.config.username = process.env.username;
+  // sequelize.config.password = process.env.password;
+  // sequelize.config.host = process.env.host;
 
 } else {
   var sequelize = new Sequelize(config.database, config.username, config.password, config);
