@@ -77,7 +77,31 @@ router.get('/videos', function (req, res) {
 });
 
 router.get('/schedule', function (req, res) {
-  res.render('schedule');
+  //res.render('schedule');
+
+  models.Schedule.findOne({
+    where: {id: 1}
+  })
+  .then(function(data) {
+    var payload = {dynamicData: data}
+
+    //decode About data for proper rendering
+    // var decodeAbout = decodeURIComponent(payload.dynamicData.about);
+    // payload.dynamicData.about = decodeAbout;
+
+    // //decode Bio data for proper rendering
+    // var decodeBio = decodeURIComponent(payload.dynamicData.bio);
+    // payload.dynamicData.bio = decodeBio;
+
+    //Add administrator credential to the created object
+    if (req.user) {
+      payload.dynamicData["administrator"] = true;
+    }
+
+    res.render('schedule', {dynamicData: payload.dynamicData});
+  })
+
+
 });
 
 router.get('/contact', function(req, res) {
@@ -310,6 +334,40 @@ router.post('/updateAboutMe', isLoggedIn, upload.any(), function(req, res) {
   res.redirect('../adminaboutme');
 });
 
+
+//Process Schedule update requests
+router.post('/updateschedule', isLoggedIn, upload.single('ScheduleImage'), function(req, res) {
+  
+  //Previous settings. Used if not overwritten below.
+  var scheduleImageToUpload = req.body.ScheduleImage; //schdule image was unchaged
+
+  //Check if image was upload & process it
+  if (typeof req.file !== "undefined") {
+    var tempImagePath  = req.file.path;
+    var destinationPath = 'public/images/' + req.file.originalname;
+
+    var imageSource = fs.createReadStream(tempImagePath);
+    var imageDestination = fs.createWriteStream(destinationPath);
+    imageSource.pipe(imageDestination);
+
+    scheduleImageToUpload = "/images/" + req.file.originalname;
+  } else {
+    scheduleImageToUpload = req.body.ScheduleImage; //schedule image was unchanged
+  }
+
+  //Upload image to amazon S3
+  //Save path to image on AS3 to store in database
+
+  //Create String to update MySQL
+  var queryString = 'UPDATE schedule SET scheduletext="' + req.body.ScheduleText + '", scheduleimage="' + scheduleImageToUpload + '", updatedAt=CURDATE() WHERE id=1';
+  
+  //Run SQL query to update data
+  connection.query(queryString, function (err, result) {
+    if (err) throw err;
+  });
+  res.redirect('../updateschedule');
+});
+
 router.post('/newvideo', isLoggedIn, function(req, res) {
 
   //Parse data from form & generate query string
@@ -351,7 +409,7 @@ router.post('/newCarousel', isLoggedIn, upload.single('carouselPicture'), functi
 
     carouselImageToUpload = "/images/" + req.file.originalname;
   } else {
-    carouselImageToUpload = req.body.carouselImage; //carousel image was unchaged
+    carouselImageToUpload = req.body.carouselImage; //carousel image was unchanged
   }
   //Parse data from form & generate query string
   var queryString = 'INSERT INTO Carousels (imagepath, quote, quotesource, createdAt, updatedAt) VALUES ("' + carouselImageToUpload + '", "' + req.body.NewQuote + '", "' + req.body.NewSource + '", CURDATE(), CURDATE())';

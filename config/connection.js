@@ -12,7 +12,7 @@ if (process.env.JAWSDB_URL) {
     port: 3306,
   	host: 'localhost',
   	user: 'root',
-   	password: 'su7tnven',
+   	password: '',
    	database: 'rl_yoga'
    });
 }

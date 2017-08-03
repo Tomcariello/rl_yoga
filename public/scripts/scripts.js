@@ -121,3 +121,14 @@ function validateUpdateBioForm(event) {
 
 	return true;
 }
+
+//Listen to update schedule page submit button
+function validateUpdateScheduleForm(event) {
+
+	var scheduleFormattedData = $('#summernoteschedule').summernote('code');
+	var scheduleEncodedData = encodeURI(scheduleFormattedData);
+
+	$("#ScheduleText").val(scheduleEncodedData);
+
+	return true;
+}
