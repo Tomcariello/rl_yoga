@@ -5,23 +5,20 @@
     </div>
   </div>
 
-  <div class='row'>
-    {{#each dynamicData}}
-     
-      <div class="col-xs-12 col-md-5 yogavideo">
-        <iframe src="{{this.url}}" frameborder="0" allowfullscreen></iframe><br/>
-        <div class="videoTitle">
-          {{this.videoname}}
-        </div>
-        <div class="videoDescription">
-          {{this.description}}
-        </div>
+  {{#each dynamicData}}
+    
+    <div class="yogavideo">
+      <iframe src="{{this.url}}" frameborder="0" allowfullscreen></iframe><br/>
+      <div class="videoTitle">
+        {{this.videoname}}
       </div>
-      <div class="col-xs-0 col-md-1">
+      <div class="videoDescription">
+        {{this.description}}
       </div>
-    {{/each}}
+    </div>
+  {{/each}}
 
-  </div>
+
 
 
 
