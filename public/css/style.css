@@ -385,3 +385,6 @@ hr {
 .hideElement {
 	display: none;
 }
+.fa-asterisk:before {
+     font-size: 20px;
+}
