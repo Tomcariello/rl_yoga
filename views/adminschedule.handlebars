@@ -15,11 +15,11 @@
       <div class="adminImageArea col-md-5">
         <img class='CMSImage' src="{{dynamicData.scheduleimage}}">
         <input type="file" name="schedulepicture" id="schedulepicture">
-        <input type="hidden" id="ScheduleImage" name="ScheduleImage" value="{{dynamicData.scheduleimage}}"/> 
+        <input type="hidden" id="scheduleimage" name="scheduleimage" value="{{dynamicData.scheduleimage}}"/> 
       </div>
 
       <div class="hideElement adminTextArea col-md-7">
-        <textarea rows="4" cols="50" id="ScheduleText" name="ScheduleText" maxlength="2000">{{dynamicData.ScheduleText}}</textarea> 
+        <textarea rows="4" cols="50" id="ScheduleText" name="ScheduleText" maxlength="2000">{{{dynamicData.scheduletext}}}</textarea> 
       </div>
 
       <div class="col-md-7">
@@ -31,7 +31,7 @@
 
     <div class="row">
         <div class='col-xs-12'>
-          <button type="submit" id="updateschedule">Update</button>
+          <button type="submit" id="updateschedulebutton">Update</button>
         </div>
     </div>
 
@@ -55,7 +55,6 @@
       //Read coded contents & decode them
       var ScheduleContent = $("#ScheduleText").val();
       var decodedSchedule = decodeURI(ScheduleContent);
-
 
       //Insert decoded text into the proper fields  
       $('#summernoteSchedule').summernote('code', decodedSchedule);

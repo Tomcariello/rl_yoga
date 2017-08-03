@@ -125,7 +125,7 @@ function validateUpdateBioForm(event) {
 //Listen to update schedule page submit button
 function validateUpdateScheduleForm(event) {
 
-	var scheduleFormattedData = $('#summernoteschedule').summernote('code');
+	var scheduleFormattedData = $('#summernoteSchedule').summernote('code');
 	var scheduleEncodedData = encodeURI(scheduleFormattedData);
 
 	$("#ScheduleText").val(scheduleEncodedData);

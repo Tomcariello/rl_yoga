@@ -85,13 +85,9 @@ router.get('/schedule', function (req, res) {
   .then(function(data) {
     var payload = {dynamicData: data}
 
-    //decode About data for proper rendering
-    // var decodeAbout = decodeURIComponent(payload.dynamicData.about);
-    // payload.dynamicData.about = decodeAbout;
-
-    // //decode Bio data for proper rendering
-    // var decodeBio = decodeURIComponent(payload.dynamicData.bio);
-    // payload.dynamicData.bio = decodeBio;
+    //decode data for proper rendering
+    var decodeSchedule = decodeURIComponent(payload.dynamicData.scheduletext);
+    payload.dynamicData.scheduletext = decodeSchedule;
 
     //Add administrator credential to the created object
     if (req.user) {
@@ -100,8 +96,6 @@ router.get('/schedule', function (req, res) {
 
     res.render('schedule', {dynamicData: payload.dynamicData});
   })
-
-
 });
 
 router.get('/contact', function(req, res) {
@@ -183,11 +177,15 @@ router.get('/admincarousel', isLoggedIn, function(req, res) {
 });
 
 router.get('/adminschedule', isLoggedIn, function(req, res) {
-  res.render('adminschedule');
+    models.Schedule.findOne({
+    where: {id: 1}
+  })
+  .then(function(data) {
+    var payload = {dynamicData: data};
+    payload.dynamicData["administrator"] = true;
+    res.render('adminschedule', {dynamicData: payload.dynamicData});
+  })
 });
-
-
-
 
 //Delete Video Object
 router.get('/deletevideos/:projectid', isLoggedIn, function(req, res) {
@@ -336,13 +334,15 @@ router.post('/updateAboutMe', isLoggedIn, upload.any(), function(req, res) {
 
 
 //Process Schedule update requests
-router.post('/updateschedule', isLoggedIn, upload.single('ScheduleImage'), function(req, res) {
-  
+router.post('/updateschedule', isLoggedIn, upload.single('schedulepicture'), function(req, res) {
+  console.log('*****procesing*****')
+
   //Previous settings. Used if not overwritten below.
-  var scheduleImageToUpload = req.body.ScheduleImage; //schdule image was unchaged
+  var scheduleImageToUpload;
 
   //Check if image was upload & process it
   if (typeof req.file !== "undefined") {
+    
     var tempImagePath  = req.file.path;
     var destinationPath = 'public/images/' + req.file.originalname;
 
@@ -352,12 +352,12 @@ router.post('/updateschedule', isLoggedIn, upload.single('ScheduleImage'), funct
 
     scheduleImageToUpload = "/images/" + req.file.originalname;
   } else {
-    scheduleImageToUpload = req.body.ScheduleImage; //schedule image was unchanged
+    scheduleImageToUpload = req.body.scheduleimage; //schedule image was unchanged
   }
 
-  //Upload image to amazon S3
-  //Save path to image on AS3 to store in database
 
+  
+  //Upload image to amazon S3 - Save path to image on AS3 to store in database
   //Create String to update MySQL
   var queryString = 'UPDATE schedule SET scheduletext="' + req.body.ScheduleText + '", scheduleimage="' + scheduleImageToUpload + '", updatedAt=CURDATE() WHERE id=1';
   
@@ -365,7 +365,7 @@ router.post('/updateschedule', isLoggedIn, upload.single('ScheduleImage'), funct
   connection.query(queryString, function (err, result) {
     if (err) throw err;
   });
-  res.redirect('../updateschedule');
+  res.redirect('../adminschedule');
 });
 
 router.post('/newvideo', isLoggedIn, function(req, res) {
