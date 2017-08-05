@@ -359,7 +359,7 @@ router.post('/updateschedule', isLoggedIn, upload.single('schedulepicture'), fun
   
   //Upload image to amazon S3 - Save path to image on AS3 to store in database
   //Create String to update MySQL
-  var queryString = 'UPDATE schedule SET scheduletext="' + req.body.ScheduleText + '", scheduleimage="' + scheduleImageToUpload + '", updatedAt=CURDATE() WHERE id=1';
+  var queryString = 'UPDATE Schedule SET scheduletext="' + req.body.ScheduleText + '", scheduleimage="' + scheduleImageToUpload + '", updatedAt=CURDATE() WHERE id=1';
   
   //Run SQL query to update data
   connection.query(queryString, function (err, result) {
