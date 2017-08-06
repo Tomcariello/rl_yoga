@@ -15,6 +15,8 @@ var aws = require('aws-sdk');
 
 //amazon S3 configuration
 var S3_BUCKET = process.env.S3_BUCKET;
+var S3_accessKeyId = process.env.AWS_ACCESS_KEY_ID
+var S3_secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY
 
 //==================================
 //=====GET routes to load pages=====
@@ -221,7 +223,6 @@ router.get('/deleteCarousel/:projectid', isLoggedIn, function(req, res) {
 })
 
 
-
 //===============================================
 //=====POST routes to record to the database=====
 //===============================================
@@ -346,8 +347,6 @@ router.post('/updateschedule', isLoggedIn, upload.single('schedulepicture'), fun
     var fileName = req.file.originalname;
     var fileType = req.file.mimetype;
 
-    //Multer options to write the file to database
-    //Doesn't work on Heroku since Heroku wiped data periodically.
     var tempImagePath  = req.file.path; //temporary path to file uploaded
     var destinationPath = 'public/images/' + fileName; //path to heroku structure images folder
     var imageSource = fs.createReadStream(tempImagePath);
@@ -357,83 +356,39 @@ router.post('/updateschedule', isLoggedIn, upload.single('schedulepicture'), fun
 
     //Create Amazon S3 specific object
     var s3 = new aws.S3();
-      var s3Params = {
-        Bucket: S3_BUCKET,
+   
+    var params = {
+      Bucket: S3_BUCKET,
+      Key: fileName,
+      Body: imageSource,
+      ACL: 'public-read',
+      accessKeyId: S3_accessKeyId,
+      secretAccessKey: S3_secretAccessKey
+     }
 
-
-        // Body: req.file, { InvalidParameterType: Expected params.Body to be a string, Buffer, Stream, Blob, or typed array object
-        // Body: imageSource,  params.Body is required
-        Body: unknown // Figure out this element to proceed
-        Key: fileName,
-        Expires: 60,
-        ContentType: fileType,
-        ACL: 'public-read'
-      };
-
-    //Put object onto the S3 server
-    s3.getSignedUrl('putObject', s3Params, function(err, data) {
-    if(err){
-      console.log(err);
-      return res.end();
-    }
-    var returnData = {
-      signedRequest: data,
-      url: `https://${S3_BUCKET}.s3.amazonaws.com/${fileName}`
-    };
-    // console.log(JSON.stringify(returnData));
-    
-    s3.upload({ 
-      s3Params 
-    }, function(err, data) {
+    s3.upload( params, function(err, data) {
       if (err) {
-        return alert('There was an error uploading your photo: ', err.message);
+        console.log("err is " + err);
       }
-      alert('Successfully uploaded photo.');
-      // viewAlbum(albumName);
-    });
-  });
+      //Get S3 filepath & set it to scheduleImageToUpload
+      scheduleImageToUpload = data.Location
 
+      //Create String to update MySQL
+      var queryString = 'UPDATE Schedule SET scheduletext="' + req.body.ScheduleText + '", scheduleimage="' + scheduleImageToUpload + '", updatedAt=CURDATE() WHERE id=1';
+  
+      //Run SQL query to update data
+      connection.query(queryString, function (err, result) {
+        if (err) throw err;
+      });
+      
+      res.redirect('../adminschedule');
+    });
 
   } else {
     scheduleImageToUpload = req.body.scheduleimage; //schedule image was unchanged
   }
 
-  //Create String to update MySQL
-  var queryString = 'UPDATE Schedule SET scheduletext="' + req.body.ScheduleText + '", scheduleimage="' + scheduleImageToUpload + '", updatedAt=CURDATE() WHERE id=1';
-  
-  //Run SQL query to update data
-  connection.query(queryString, function (err, result) {
-    if (err) throw err;
-  });
-  res.redirect('../adminschedule');
 });
-
-//Amazon S3 uploads
-// router.get('/sign-s3', function(req, res) {
-//   var s3 = new aws.S3();
-//   var fileName = req.query['file-name'];
-//   var fileType = req.query['file-type'];
-//   var s3Params = {
-//     Bucket: S3_BUCKET,
-//     Key: fileName,
-//     Expires: 60,
-//     ContentType: fileType,
-//     ACL: 'public-read'
-//   };
-
-//   s3.getSignedUrl('putObject', s3Params, function(err, data) {
-//     if(err){
-//       console.log(err);
-//       return res.end();
-//     }
-//     var returnData = {
-//       signedRequest: data,
-//       url: `https://${S3_BUCKET}.s3.amazonaws.com/${fileName}`
-//     };
-//     res.write(JSON.stringify(returnData));
-//     res.end();
-//   });
-// });
 
 
 router.post('/newvideo', isLoggedIn, function(req, res) {
