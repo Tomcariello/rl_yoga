@@ -11,10 +11,10 @@ var sequelizeConnection = models.sequelize;
 var multer  = require('multer');
 var upload = multer({dest: __dirname + '/public/images/'}); 
 var fs = require('fs');
+var aws = require('aws-sdk');
 
-// console.log('*************************');
-// console.log(sequelizeConnection.config);
-// console.log('*************************');
+//amazon S3 configuration
+var S3_BUCKET = process.env.S3_BUCKET;
 
 //==================================
 //=====GET routes to load pages=====
@@ -220,6 +220,8 @@ router.get('/deleteCarousel/:projectid', isLoggedIn, function(req, res) {
   res.redirect('../admincarousel');
 })
 
+
+
 //===============================================
 //=====POST routes to record to the database=====
 //===============================================
@@ -335,29 +337,67 @@ router.post('/updateAboutMe', isLoggedIn, upload.any(), function(req, res) {
 
 //Process Schedule update requests
 router.post('/updateschedule', isLoggedIn, upload.single('schedulepicture'), function(req, res) {
-  console.log('*****procesing*****')
-
-  //Previous settings. Used if not overwritten below.
   var scheduleImageToUpload;
 
   //Check if image was upload & process it
   if (typeof req.file !== "undefined") {
-    
-    var tempImagePath  = req.file.path;
-    var destinationPath = 'public/images/' + req.file.originalname;
 
+    //Process file being uploaded
+    var fileName = req.file.originalname;
+    var fileType = req.file.mimetype;
+
+    //Multer options to write the file to database
+    //Doesn't work on Heroku since Heroku wiped data periodically.
+    var tempImagePath  = req.file.path; //temporary path to file uploaded
+    var destinationPath = 'public/images/' + fileName; //path to heroku structure images folder
     var imageSource = fs.createReadStream(tempImagePath);
     var imageDestination = fs.createWriteStream(destinationPath);
     imageSource.pipe(imageDestination);
-
     scheduleImageToUpload = "/images/" + req.file.originalname;
+
+    //Create Amazon S3 specific object
+    var s3 = new aws.S3();
+      var s3Params = {
+        Bucket: S3_BUCKET,
+
+
+        // Body: req.file, { InvalidParameterType: Expected params.Body to be a string, Buffer, Stream, Blob, or typed array object
+        // Body: imageSource,  params.Body is required
+        Body: unknown // Figure out this element to proceed
+        Key: fileName,
+        Expires: 60,
+        ContentType: fileType,
+        ACL: 'public-read'
+      };
+
+    //Put object onto the S3 server
+    s3.getSignedUrl('putObject', s3Params, function(err, data) {
+    if(err){
+      console.log(err);
+      return res.end();
+    }
+    var returnData = {
+      signedRequest: data,
+      url: `https://${S3_BUCKET}.s3.amazonaws.com/${fileName}`
+    };
+    // console.log(JSON.stringify(returnData));
+    
+    s3.upload({ 
+      s3Params 
+    }, function(err, data) {
+      if (err) {
+        return alert('There was an error uploading your photo: ', err.message);
+      }
+      alert('Successfully uploaded photo.');
+      // viewAlbum(albumName);
+    });
+  });
+
+
   } else {
     scheduleImageToUpload = req.body.scheduleimage; //schedule image was unchanged
   }
 
-
-  
-  //Upload image to amazon S3 - Save path to image on AS3 to store in database
   //Create String to update MySQL
   var queryString = 'UPDATE Schedule SET scheduletext="' + req.body.ScheduleText + '", scheduleimage="' + scheduleImageToUpload + '", updatedAt=CURDATE() WHERE id=1';
   
@@ -367,6 +407,34 @@ router.post('/updateschedule', isLoggedIn, upload.single('schedulepicture'), fun
   });
   res.redirect('../adminschedule');
 });
+
+//Amazon S3 uploads
+// router.get('/sign-s3', function(req, res) {
+//   var s3 = new aws.S3();
+//   var fileName = req.query['file-name'];
+//   var fileType = req.query['file-type'];
+//   var s3Params = {
+//     Bucket: S3_BUCKET,
+//     Key: fileName,
+//     Expires: 60,
+//     ContentType: fileType,
+//     ACL: 'public-read'
+//   };
+
+//   s3.getSignedUrl('putObject', s3Params, function(err, data) {
+//     if(err){
+//       console.log(err);
+//       return res.end();
+//     }
+//     var returnData = {
+//       signedRequest: data,
+//       url: `https://${S3_BUCKET}.s3.amazonaws.com/${fileName}`
+//     };
+//     res.write(JSON.stringify(returnData));
+//     res.end();
+//   });
+// });
+
 
 router.post('/newvideo', isLoggedIn, function(req, res) {
 
@@ -474,7 +542,6 @@ function sendAutomaticEmail(mailOptions, req, res) {
     };
   });
 }
-
 
 
 module.exports = router;

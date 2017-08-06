@@ -1,4 +1,4 @@
-//Set up the server to use mySQL locally & Jaws once deployed
+//Set up the server to use mySQL locally & Jaws once deployed on Heroku
 var Sequelize = require('sequelize'),
   connection;
 if (process.env.JAWSDB_URL){
@@ -19,18 +19,15 @@ var LocalStrategy = require('passport-local').Strategy;
 var session = require('express-session');
 
 var app = express();
-require('./config/passportConfig.js')(passport);
 
-// Serve static content for the app from the "public" directory in the application directory.
 app.use(express.static(__dirname + '/public'));
-
-app.use(cookieParser()); //read cookies
-
-app.use(bodyParser.urlencoded({ //read data from forms
+app.use(cookieParser()); 
+app.use(bodyParser.urlencoded({ 
 	extended: false
 }));
 
-var exphbs = require('express-handlebars'); //for templating
+//Handelbars configuration
+var exphbs = require('express-handlebars'); 
 app.engine('handlebars', exphbs({
 	defaultLayout: 'main'
 }));
@@ -40,6 +37,8 @@ app.set('view engine', 'handlebars');
 require('./config/passportConfig.js');
 
 //Passport configuration
+require('./config/passportConfig.js')(passport);
+
 app.use(session({ secret: 'tomtest' })); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
