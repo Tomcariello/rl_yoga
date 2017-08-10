@@ -130,6 +130,47 @@ router.get('/login', function(req, res) {
   res.render('login');
 });
 
+// router.post('/updateimage', function(req, res) {
+  
+//   console.log(req.data);
+
+//   // if (typeof req.file !== "undefined") {
+
+//     //Process file being uploaded
+//     // var fileName = req.data.originalname;
+//     // var fileType = req.data.mimetype;
+
+//     // var tempImagePath  = req.data.path; //temporary path to file uploaded
+//     // var destinationPath = 'public/images/' + fileName; //path to heroku structure images folder
+//     // var imageSource = fs.createReadStream(tempImagePath);
+//     // var imageDestination = fs.createWriteStream(destinationPath);
+//     // imageSource.pipe(imageDestination);
+//     // scheduleImageToUpload = "/images/" + req.data.originalname;
+
+//     //Create Amazon S3 specific object
+//     var s3 = new aws.S3();
+
+//     var params = {
+//       Bucket: S3_BUCKET,
+//       Key: "fileName", //This is what S3 will use to store the data uploaded.
+//       Body: req.data, //the actual *file* being uploaded
+//       ContentType: "req.data.mimetype", //type of file being uploaded
+//       ACL: 'public-read', //Set permissions so everyone can see the image
+//       accessKeyId: S3_accessKeyId,
+//       secretAccessKey: S3_secretAccessKey
+//      }
+
+//     s3.upload( params, function(err, data) {
+//       if (err) {
+//         console.log("err is " + err);
+//       } else {
+//         console.log('Database updated');
+//         res.status(200).json(req);
+//       }
+//     })
+//   // }
+// });
+
 //============================================
 //=====GET PROTECTED routes to load pages=====
 //============================================
@@ -356,12 +397,18 @@ router.post('/updateschedule', isLoggedIn, upload.single('schedulepicture'), fun
 
     //Create Amazon S3 specific object
     var s3 = new aws.S3();
+
+    //Create "stream" of the file
+    var stream = fs.createReadStream(req.file.path)
    
+    //This uploads the file but the file cannot be viewed.
     var params = {
       Bucket: S3_BUCKET,
-      Key: fileName,
-      Body: imageSource,
-      ACL: 'public-read',
+      Key: fileName, //This is what S3 will use to store the data uploaded.
+      Body: stream, //the actual *file* being uploaded
+      ContentType: req.file.mimetype, //type of file being uploaded
+      ACL: 'public-read', //Set permissions so everyone can see the image
+      processData: false,
       accessKeyId: S3_accessKeyId,
       secretAccessKey: S3_secretAccessKey
      }
@@ -370,8 +417,11 @@ router.post('/updateschedule', isLoggedIn, upload.single('schedulepicture'), fun
       if (err) {
         console.log("err is " + err);
       }
+
       //Get S3 filepath & set it to scheduleImageToUpload
       scheduleImageToUpload = data.Location
+
+      console.log(scheduleImageToUpload);
 
       //Create String to update MySQL
       var queryString = 'UPDATE Schedule SET scheduletext="' + req.body.ScheduleText + '", scheduleimage="' + scheduleImageToUpload + '", updatedAt=CURDATE() WHERE id=1';
