@@ -130,46 +130,6 @@ router.get('/login', function(req, res) {
   res.render('login');
 });
 
-// router.post('/updateimage', function(req, res) {
-  
-//   console.log(req.data);
-
-//   // if (typeof req.file !== "undefined") {
-
-//     //Process file being uploaded
-//     // var fileName = req.data.originalname;
-//     // var fileType = req.data.mimetype;
-
-//     // var tempImagePath  = req.data.path; //temporary path to file uploaded
-//     // var destinationPath = 'public/images/' + fileName; //path to heroku structure images folder
-//     // var imageSource = fs.createReadStream(tempImagePath);
-//     // var imageDestination = fs.createWriteStream(destinationPath);
-//     // imageSource.pipe(imageDestination);
-//     // scheduleImageToUpload = "/images/" + req.data.originalname;
-
-//     //Create Amazon S3 specific object
-//     var s3 = new aws.S3();
-
-//     var params = {
-//       Bucket: S3_BUCKET,
-//       Key: "fileName", //This is what S3 will use to store the data uploaded.
-//       Body: req.data, //the actual *file* being uploaded
-//       ContentType: "req.data.mimetype", //type of file being uploaded
-//       ACL: 'public-read', //Set permissions so everyone can see the image
-//       accessKeyId: S3_accessKeyId,
-//       secretAccessKey: S3_secretAccessKey
-//      }
-
-//     s3.upload( params, function(err, data) {
-//       if (err) {
-//         console.log("err is " + err);
-//       } else {
-//         console.log('Database updated');
-//         res.status(200).json(req);
-//       }
-//     })
-//   // }
-// });
 
 //============================================
 //=====GET PROTECTED routes to load pages=====
@@ -231,37 +191,44 @@ router.get('/adminschedule', isLoggedIn, function(req, res) {
 });
 
 //Delete Video Object
-router.get('/deletevideos/:projectid', isLoggedIn, function(req, res) {
+router.get('/deletevideos/:videoID', isLoggedIn, function(req, res) {
 
-  var queryString = 'DELETE from Videos WHERE id=' + req.params.projectid + ';';
-
-  connection.query(queryString, function (err, result) {
-    if (err) throw err;
-  });
-  res.redirect('../adminvideos');
+  //Use Sequelize to find the relevant DB object
+  models.Videos.findOne({ where: {id: req.params.videoID} })
+  .then(function(id) {
+    //Delete the object
+    id.destroy();
+  }).then(function(){
+    res.redirect('../adminvideos');
+  })
 })
 
 //Delete Message
-router.get('/deletemessage/:projectid', isLoggedIn, function(req, res) {
+router.get('/deletemessage/:messageId', isLoggedIn, function(req, res) {
 
-  var queryString = 'DELETE from messages WHERE id=' + req.params.projectid + ';';
-
-  connection.query(queryString, function (err, result) {
-    if (err) throw err;
-  });
-  res.redirect('../viewmessages');
+  //Use Sequelize to find the relevant DB object
+  models.messages.findOne({ where: {id: req.params.messageId} })
+  .then(function(id) {
+    //Delete the object
+    id.destroy();
+  }).then(function(){
+    res.redirect('../viewmessages');
+  })
 })
 
 //Delete Carousel Object
-router.get('/deleteCarousel/:projectid', isLoggedIn, function(req, res) {
+router.get('/deleteCarousel/:carouselId', isLoggedIn, function(req, res) {
 
-  var queryString = 'DELETE from Carousels WHERE id=' + req.params.projectid + ';';
-
-  connection.query(queryString, function (err, result) {
-    if (err) throw err;
-  });
-  res.redirect('../admincarousel');
+  //Use Sequelize to find the relevant DB object
+  models.Carousel.findOne({ where: {id: req.params.carouselId} })
+  .then(function(id) {
+    //Delete the object
+    id.destroy();
+  }).then(function(){
+    res.redirect('../admincarousel');
+  })
 })
+
 
 
 //===============================================
@@ -281,26 +248,31 @@ router.post('/login', passport.authenticate('local-login', {
 }));
 
 router.post('/contact/message', function(req, res) {
-  //Parse data from form & generate query string
-  var queryString = 'INSERT INTO messages (name, email, message, createdAt, updatedAt) VALUES ("' + req.body.fname + '", "' + req.body.email + '", "' + req.body.message + '", CURDATE(), CURDATE())';
 
-  //Run SQL query to add data to table
-  connection.query(queryString, function (err, result) {
-    if (err) throw err;
-  });
+  var currentDate = new Date();
 
-  //Send email to alert the admin that a message was recieved
-  var mailOptions = {
-      from: 'contact@tomcariello.com', // sender address
-      to: 'tomcariello@gmail.com', // list of receivers
-      subject: 'Someone left you a message', // Subject line
-      text: 'Name: ' + req.body.fname + '\n Message: ' + req.body.message
-  };
+  //Use Sequelize to push to DB
+  models.messages.create({
+      name: req.body.fname,
+      email: req.body.email,
+      message: req.body.message,
+      createdAt: currentDate,
+      updatedAt: currentDate
+  }).then(function(){
 
-  sendAutomaticEmail(mailOptions);
-  req.session.messageSent = true;
+    //Send email to alert the admin that a message was recieved
+    var mailOptions = {
+        from: 'contact@tomcariello.com', // sender address
+        to: 'tomcariello@gmail.com', // list of receivers
+        subject: 'Someone left you a message', // Subject line
+        text: 'Name: ' + req.body.fname + '\n Message: ' + req.body.message
+    };
 
-  res.redirect('../contact');
+    sendAutomaticEmail(mailOptions);
+    req.session.messageSent = true;
+
+    res.redirect('../contact');
+  })
 });
 
 //Process About Me update requests
@@ -335,9 +307,7 @@ router.post('/updateAboutMe', isLoggedIn, upload.any(), function(req, res) {
         //Upload image to amazon S3
 
         //Save path to image on AS3 to store in database
-
-
-        
+       
       } else if (req.files[0].fieldname == "biopicture") {  //If image uploaded for Bio
         var tempBioImagePath  = req.files[0].path;
         var destinationPath = 'public/images/' + req.files[0].originalname;
@@ -366,16 +336,24 @@ router.post('/updateAboutMe', isLoggedIn, upload.any(), function(req, res) {
     }
   }
 
-  //Create String to update MySQL
-  var queryString = 'UPDATE AboutMe SET about="' + req.body.AboutMeBio + '", aboutimage="' + aboutMeImageToUpload + '", bio="' + req.body.biotext + '", bioimage="' + bioImageToUpload +  '", updatedAt=CURDATE() WHERE id=1';
-  
-  //Run SQL query to update data
-  connection.query(queryString, function (err, result) {
-    if (err) throw err;
-  });
-  res.redirect('../adminaboutme');
-});
+  var currentDate = new Date();
 
+  //Use Sequelize to find the relevant DB object
+  models.AboutMe.findOne({ where: {id: 1} })
+  
+  .then(function(id) {
+    //Update the data
+    id.updateAttributes({
+        about: req.body.AboutMeBio,
+        aboutimage: aboutMeImageToUpload,
+        bio: req.body.biotext,
+        bioimage: bioImageToUpload,
+        updatedAt: currentDate
+    }).then(function(){
+      res.redirect('../adminaboutme');
+    })
+  })
+});
 
 //Process Schedule update requests
 router.post('/updateschedule', isLoggedIn, upload.single('schedulepicture'), function(req, res) {
@@ -387,26 +365,24 @@ router.post('/updateschedule', isLoggedIn, upload.single('schedulepicture'), fun
     //Process file being uploaded
     var fileName = req.file.originalname;
     var fileType = req.file.mimetype;
+    var stream = fs.createReadStream(req.file.path) //Create "stream" of the file
 
-    var tempImagePath  = req.file.path; //temporary path to file uploaded
-    var destinationPath = 'public/images/' + fileName; //path to heroku structure images folder
-    var imageSource = fs.createReadStream(tempImagePath);
-    var imageDestination = fs.createWriteStream(destinationPath);
-    imageSource.pipe(imageDestination);
-    scheduleImageToUpload = "/images/" + req.file.originalname;
+    // var tempImagePath  = req.file.path; //temporary path to file uploaded
+    // var destinationPath = 'public/images/' + fileName; //path to heroku structure images folder
+    // var imageSource = fs.createReadStream(tempImagePath);
+    // var imageDestination = fs.createWriteStream(destinationPath);
+    // imageSource.pipe(imageDestination);
+    // scheduleImageToUpload = "/images/" + req.file.originalname;
 
     //Create Amazon S3 specific object
     var s3 = new aws.S3();
 
-    //Create "stream" of the file
-    var stream = fs.createReadStream(req.file.path)
-   
     //This uploads the file but the file cannot be viewed.
     var params = {
       Bucket: S3_BUCKET,
       Key: fileName, //This is what S3 will use to store the data uploaded.
       Body: stream, //the actual *file* being uploaded
-      ContentType: req.file.mimetype, //type of file being uploaded
+      ContentType: fileType, //type of file being uploaded
       ACL: 'public-read', //Set permissions so everyone can see the image
       processData: false,
       accessKeyId: S3_accessKeyId,
@@ -421,50 +397,71 @@ router.post('/updateschedule', isLoggedIn, upload.single('schedulepicture'), fun
       //Get S3 filepath & set it to scheduleImageToUpload
       scheduleImageToUpload = data.Location
 
-      console.log(scheduleImageToUpload);
-
-      //Create String to update MySQL
-      var queryString = 'UPDATE Schedule SET scheduletext="' + req.body.ScheduleText + '", scheduleimage="' + scheduleImageToUpload + '", updatedAt=CURDATE() WHERE id=1';
-  
-      //Run SQL query to update data
-      connection.query(queryString, function (err, result) {
-        if (err) throw err;
-      });
-      
-      res.redirect('../adminschedule');
+      // //Create String to update MySQL
+      // var queryString = 'UPDATE Schedule SET scheduletext="' + req.body.ScheduleText + '", scheduleimage="' + scheduleImageToUpload + '", updatedAt=CURDATE() WHERE id=1';
+      // //Run SQL query to update data
+      // connection.query(queryString, function (err, result) {
+      //   if (err) throw err;
+      // });
+      // res.redirect('../adminschedule');
     });
 
-  } else {
-    scheduleImageToUpload = req.body.scheduleimage; //schedule image was unchanged
+  } else { //image did not change, so maintain the old URL
+    scheduleImageToUpload = req.body.scheduleimage; 
   }
 
+  //Use Sequelize to find the relevant DB object
+  models.Schedule.findOne({ where: {id: 1} })
+  
+  .then(function(id) {
+    var currentDate = new Date();
+
+    //Update the data
+    id.updateAttributes({
+        scheduletext: req.body.ScheduleText,
+        scheduleimage: scheduleImageToUpload,
+        updatedAt: currentDate
+    }).then(function(){
+      res.redirect('../adminschedule');
+    })
+  })
 });
 
 
 router.post('/newvideo', isLoggedIn, function(req, res) {
 
-  //Parse data from form & generate query string
-  var queryString = 'INSERT INTO Videos (videoname, description, url, createdAt, updatedAt) VALUES ("' + req.body.NewVideoName + '", "' + req.body.NewDescription + '", "' + req.body.NewVideoURL + '", CURDATE(), CURDATE())';
+  var currentDate = new Date();
 
-  //Run SQL query to add data to table
-  connection.query(queryString, function (err, result) {
-    if (err) throw err;
-  });
+  //Use Sequelize to push to DB
+  models.Videos.create({
+      videoname: req.body.NewVideoName,
+      description: req.body.NewDescription,
+      url: req.body.NewVideoURL,
+      createdAt: currentDate,
+      updatedAt: currentDate
+  }).then(function(){
 
-  res.redirect('../adminvideos');
+    res.redirect('../adminvideos');
+  })
 });
 
 router.post('/updatevideo', isLoggedIn, function(req, res) {
+  var currentDate = new Date();
 
-  //Parse data from form & generate query string
-  var queryString = 'Update Videos SET videoname="' + req.body.videoname + '", description="'+  req.body.description + '", url="' + req.body.url + '", updatedAt=CURDATE() WHERE id="' +  req.body.dbid + '"';
+  //Use Sequelize to find the relevant DB object
+  models.Videos.findOne({ where: {id: req.body.dbid} })
 
-  //Run SQL query to add data to table
-  connection.query(queryString, function (err, result) {
-    if (err) throw err;
-  });
-
-  res.redirect('../adminvideos');
+  .then(function(id) {
+    //Update the data
+    id.updateAttributes({
+        videoname: req.body.videoname,
+        description: req.body.description,
+        url: req.body.url,
+        updatedAt: currentDate
+    }).then(function(){
+      res.redirect('../adminvideos');
+    })
+  })
 });
 
 router.post('/newCarousel', isLoggedIn, upload.single('carouselPicture'), function(req, res) {
@@ -484,17 +481,21 @@ router.post('/newCarousel', isLoggedIn, upload.single('carouselPicture'), functi
   } else {
     carouselImageToUpload = req.body.carouselImage; //carousel image was unchanged
   }
-  //Parse data from form & generate query string
-  var queryString = 'INSERT INTO Carousels (imagepath, quote, quotesource, createdAt, updatedAt) VALUES ("' + carouselImageToUpload + '", "' + req.body.NewQuote + '", "' + req.body.NewSource + '", CURDATE(), CURDATE())';
 
-  //Run SQL query to add data to table
-  connection.query(queryString, function (err, result) {
-    if (err) throw err;
-  });
+  var currentDate = new Date();
 
-  res.redirect('../admincarousel');
+  //Use Sequelize to push to DB
+  models.Carousel.create({
+      imagepath: carouselImageToUpload,
+      quote: req.body.NewQuote,
+      quotesource: req.body.NewSource,
+      createdAt: currentDate,
+      updatedAt: currentDate
+  }).then(function(){
+
+    res.redirect('../admincarousel');
+  })
 });
-
 
 router.post('/updateCarousel', isLoggedIn, upload.single('carouselPicture'), function(req, res) {
 
@@ -514,18 +515,23 @@ router.post('/updateCarousel', isLoggedIn, upload.single('carouselPicture'), fun
     carouselImageToUpload = req.body.carouselImage; //carousel image was unchaged
   }
 
-  //Parse data from form & generate query string
-  var queryString = 'Update Carousels SET imagepath="' + carouselImageToUpload + '", quote="'+  req.body.carouselQuote + '", quotesource="' + req.body.carouselSource + '", updatedAt=CURDATE() WHERE id="' +  req.body.dbid + '"';
+  var currentDate = new Date();
 
-  //Run SQL query to add data to table
-  connection.query(queryString, function (err, result) {
-    if (err) throw err;
-  });
-
-  res.redirect('../admincarousel');
+  //Use Sequelize to find the relevant DB object
+  models.Carousel.findOne({ where: {id: req.body.dbid} })
+  
+  .then(function(id) {
+    //Update the data
+    id.updateAttributes({
+        imagepath: carouselImageToUpload,
+        quote: req.body.carouselQuote,
+        quotesource: req.body.carouselSource,
+        updatedAt: currentDate
+    }).then(function(){
+      res.redirect('../admincarousel');
+    })
+  })
 });
-
-
 
 // route middleware to make sure user is verified
 function isLoggedIn(req, res, next) {
@@ -537,7 +543,7 @@ function isLoggedIn(req, res, next) {
   res.redirect('/');
 }
 
-
+//Function to faciliate sendin email alerts
 function sendAutomaticEmail(mailOptions, req, res) {
   transporter.sendMail(mailOptions, function(error, info){
     if(error){
