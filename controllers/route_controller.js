@@ -263,7 +263,7 @@ router.post('/contact/message', function(req, res) {
     //Send email to alert the admin that a message was recieved
     var mailOptions = {
         from: 'contact@tomcariello.com', // sender address
-        to: 'tomcariello@gmail.com', // list of receivers
+        to: 'tomcariello@gmail.com', // list of recipients
         subject: 'Someone left you a message', // Subject line
         text: 'Name: ' + req.body.fname + '\n Message: ' + req.body.message
     };
@@ -287,72 +287,193 @@ router.post('/updateAboutMe', isLoggedIn, upload.any(), function(req, res) {
 
     if (req.files.length == 1) {
 
-      //If image uploaded was for ABOUT ME
+      //If only image uploaded was for ABOUT ME
       if (req.files[0].fieldname == "profilepicture") {
-        //Add vars to contain name & destination
-        var tempAboutMeImagePath  = req.files[0].path;
-        var destinationPath = 'public/images/' + req.files[0].originalname;
 
-        //create file path & destination
-        var imageSource = fs.createReadStream(tempAboutMeImagePath);
-        var imageDestination = fs.createWriteStream(destinationPath);
+        //Process file being uploaded
+        var fileName = req.files[0].originalname;
+        var fileType = req.files[0].mimetype;
+        var stream = fs.createReadStream(req.files[0].path) //Create "stream" of the file
 
-        //save image to destination
-        imageSource.pipe(imageDestination);
+        //Create Amazon S3 specific object
+        var s3 = new aws.S3();
 
-        //Save path to image to store in database
-        aboutMeImageToUpload = "/images/" + req.files[0].originalname;
+        var params = {
+          Bucket: S3_BUCKET,
+          Key: fileName, //This is what S3 will use to store the data uploaded.
+          Body: stream, //the actual *file* being uploaded
+          ContentType: fileType, //type of file being uploaded
+          ACL: 'public-read', //Set permissions so everyone can see the image
+          processData: false,
+          accessKeyId: S3_accessKeyId,
+          secretAccessKey: S3_secretAccessKey
+        }
 
+        s3.upload( params, function(err, data) {
+          if (err) {
+            console.log("err is " + err);
+          }
 
-        //Upload image to amazon S3
+          //Get S3 filepath & set it to aboutMeImageToUpload
+          aboutMeImageToUpload = data.Location
 
-        //Save path to image on AS3 to store in database
-       
-      } else if (req.files[0].fieldname == "biopicture") {  //If image uploaded for Bio
-        var tempBioImagePath  = req.files[0].path;
-        var destinationPath = 'public/images/' + req.files[0].originalname;
+          var currentDate = new Date();
 
-        var imageSource = fs.createReadStream(tempBioImagePath);
-        var imageDestination = fs.createWriteStream(destinationPath);
-        imageSource.pipe(imageDestination);
-        bioImageToUpload = "/images/" + req.files[0].originalname;
+          //Use Sequelize to find the relevant DB object
+          models.AboutMe.findOne({ where: {id: 1} })
+          
+          .then(function(id) {
+            //Update the data
+            id.updateAttributes({
+                about: req.body.AboutMeBio,
+                aboutimage: aboutMeImageToUpload,
+                bio: req.body.biotext,
+                bioimage: bioImageToUpload,
+                updatedAt: currentDate
+            }).then(function(){
+              res.redirect('../adminaboutme');
+            })
+          })
+        });
+      //If only image uploaded was for BIO
+      } else if (req.files[0].fieldname == "biopicture") {  
+        var fileName = req.files[0].originalname;
+        var fileType = req.files[0].mimetype;
+        var stream = fs.createReadStream(req.files[0].path) //Create "stream" of the file
+
+        //Create Amazon S3 specific object
+        var s3 = new aws.S3();
+
+        var params = {
+          Bucket: S3_BUCKET,
+          Key: fileName, //This is what S3 will use to store the data uploaded.
+          Body: stream, //the actual *file* being uploaded
+          ContentType: fileType, //type of file being uploaded
+          ACL: 'public-read', //Set permissions so everyone can see the image
+          processData: false,
+          accessKeyId: S3_accessKeyId,
+          secretAccessKey: S3_secretAccessKey
+        }
+
+        s3.upload( params, function(err, data) {
+          if (err) {
+            console.log("err is " + err);
+          }
+
+          //Get S3 filepath & set it to bioImageToUpload
+          bioImageToUpload = data.Location
+
+          var currentDate = new Date();
+
+          //Use Sequelize to find the relevant DB object
+          models.AboutMe.findOne({ where: {id: 1} })
+          
+          .then(function(id) {
+            //Update the data
+            id.updateAttributes({
+                about: req.body.AboutMeBio,
+                aboutimage: bioImageToUpload,
+                bio: req.body.biotext,
+                bioimage: bioImageToUpload,
+                updatedAt: currentDate
+            }).then(function(){
+              res.redirect('../adminaboutme');
+            })
+          })
+        });
       }
-    } else if (req.files.length == 2){ //multiple files uploaded
-        //Process AboutMe Image
-        var tempAboutMeImagePath  = req.files[0].path;
-        var destinationPath = 'public/images/' + req.files[0].originalname;
-        var imageSource = fs.createReadStream(tempAboutMeImagePath);
-        var imageDestination = fs.createWriteStream(destinationPath);
-        imageSource.pipe(imageDestination);
-        aboutMeImageToUpload = "/images/" + req.files[0].originalname;
+    } else if (req.files.length == 2){  //multiple files uploaded
+        var currentDate = new Date();
 
-        //Process Bio Image
-        var tempBioImagePath  = req.files[1].path;
-        var bioDestinationPath = 'public/images/' + req.files[1].originalname;
-        var bioImageSource = fs.createReadStream(tempBioImagePath);
-        var bioImageDestination = fs.createWriteStream(bioDestinationPath);
-        bioImageSource.pipe(bioImageDestination);
-        bioImageToUpload = "/images/" + req.files[1].originalname;
+        //Process files being uploaded
+        var aboutMefileName = req.files[0].originalname;
+        var aboutMefileType = req.files[0].mimetype;
+        var aboutMestream = fs.createReadStream(req.files[0].path)
+
+        var biofileName = req.files[1].originalname;
+        var biofileType = req.files[1].mimetype;
+        var biostream = fs.createReadStream(req.files[1].path)
+
+        //Create Amazon S3 specific objects
+        var aboutMes3 = new aws.S3();
+        var bios3 = new aws.S3();
+
+        //Create S3 objects
+        var aboutMeparams = {
+          Bucket: S3_BUCKET,
+          Key: aboutMefileName, //This is what S3 will use to store the data uploaded.
+          Body: aboutMestream, //the actual *file* being uploaded
+          ContentType: aboutMefileType, //type of file being uploaded
+          ACL: 'public-read', //Set permissions so everyone can see the image
+          processData: false,
+          accessKeyId: S3_accessKeyId,
+          secretAccessKey: S3_secretAccessKey
+        }
+
+        var bioparams = {
+          Bucket: S3_BUCKET,
+          Key: biofileName, //This is what S3 will use to store the data uploaded.
+          Body: biostream, //the actual *file* being uploaded
+          ContentType: biofileType, //type of file being uploaded
+          ACL: 'public-read', //Set permissions so everyone can see the image
+          processData: false,
+          accessKeyId: S3_accessKeyId,
+          secretAccessKey: S3_secretAccessKey
+        }
+
+        //Upload About Me image first
+        aboutMes3.upload( aboutMeparams, function(err, data) {
+          if (err) {
+            console.log("err is " + err);
+          }
+
+          //Get S3 filepath & set it to aboutMeImageToUpload
+          aboutMeImageToUpload = data.Location;
+
+          //Upload Bio image after About Me is done
+          bios3.upload( bioparams, function(err, data) {
+            if (err) {
+              console.log("err is " + err);
+            }
+
+            //Get S3 filepath & set it to bioImageToUpload
+            bioImageToUpload = data.Location
+
+            //Use Sequelize to find the relevant DB object
+            models.AboutMe.findOne({ where: {id: 1} })
+            
+            .then(function(id) {
+              //Update the data
+              id.updateAttributes({
+                  about: req.body.AboutMeBio,
+                  aboutimage: aboutMeImageToUpload,
+                  bio: req.body.biotext,
+                  bioimage: bioImageToUpload,
+                  updatedAt: currentDate
+              }).then(function(){
+                res.redirect('../adminaboutme');
+              })
+            })
+          });
+        });
+    } else { //No images to upload, just update the text
+      var currentDate = new Date();
+
+      //Use Sequelize to find the relevant DB object
+      models.AboutMe.findOne({ where: {id: 1} })
+      
+      .then(function(id) {
+        //Update the data
+        id.updateAttributes({
+            about: req.body.AboutMeBio,
+            bio: req.body.biotext,
+            updatedAt: currentDate
+        }).then(function(){
+          res.redirect('../adminaboutme');
+        })
+      })
     }
   }
-
-  var currentDate = new Date();
-
-  //Use Sequelize to find the relevant DB object
-  models.AboutMe.findOne({ where: {id: 1} })
-  
-  .then(function(id) {
-    //Update the data
-    id.updateAttributes({
-        about: req.body.AboutMeBio,
-        aboutimage: aboutMeImageToUpload,
-        bio: req.body.biotext,
-        bioimage: bioImageToUpload,
-        updatedAt: currentDate
-    }).then(function(){
-      res.redirect('../adminaboutme');
-    })
-  })
 });
 
 //Process Schedule update requests
@@ -367,17 +488,9 @@ router.post('/updateschedule', isLoggedIn, upload.single('schedulepicture'), fun
     var fileType = req.file.mimetype;
     var stream = fs.createReadStream(req.file.path) //Create "stream" of the file
 
-    // var tempImagePath  = req.file.path; //temporary path to file uploaded
-    // var destinationPath = 'public/images/' + fileName; //path to heroku structure images folder
-    // var imageSource = fs.createReadStream(tempImagePath);
-    // var imageDestination = fs.createWriteStream(destinationPath);
-    // imageSource.pipe(imageDestination);
-    // scheduleImageToUpload = "/images/" + req.file.originalname;
-
     //Create Amazon S3 specific object
     var s3 = new aws.S3();
 
-    //This uploads the file but the file cannot be viewed.
     var params = {
       Bucket: S3_BUCKET,
       Key: fileName, //This is what S3 will use to store the data uploaded.
@@ -397,13 +510,6 @@ router.post('/updateschedule', isLoggedIn, upload.single('schedulepicture'), fun
       //Get S3 filepath & set it to scheduleImageToUpload
       scheduleImageToUpload = data.Location
 
-      // //Create String to update MySQL
-      // var queryString = 'UPDATE Schedule SET scheduletext="' + req.body.ScheduleText + '", scheduleimage="' + scheduleImageToUpload + '", updatedAt=CURDATE() WHERE id=1';
-      // //Run SQL query to update data
-      // connection.query(queryString, function (err, result) {
-      //   if (err) throw err;
-      // });
-      // res.redirect('../adminschedule');
     });
 
   } else { //image did not change, so maintain the old URL
@@ -470,67 +576,135 @@ router.post('/newCarousel', isLoggedIn, upload.single('carouselPicture'), functi
 
   //Check if image was upload & process it
   if (typeof req.file !== "undefined") {
-    var tempImagePath  = req.file.path;
-    var destinationPath = 'public/images/' + req.file.originalname;
+    //Process file being uploaded
+    var fileName = req.file.originalname;
+    var fileType = req.file.mimetype;
+    var stream = fs.createReadStream(req.file.path) //Create "stream" of the file
 
-    var imageSource = fs.createReadStream(tempImagePath);
-    var imageDestination = fs.createWriteStream(destinationPath);
-    imageSource.pipe(imageDestination);
+    //Create Amazon S3 specific object
+    var s3 = new aws.S3();
 
-    carouselImageToUpload = "/images/" + req.file.originalname;
+    var params = {
+      Bucket: S3_BUCKET,
+      Key: fileName, //This is what S3 will use to store the data uploaded.
+      Body: stream, //the actual *file* being uploaded
+      ContentType: fileType, //type of file being uploaded
+      ACL: 'public-read', //Set permissions so everyone can see the image
+      processData: false,
+      accessKeyId: S3_accessKeyId,
+      secretAccessKey: S3_secretAccessKey
+     }
+
+    s3.upload( params, function(err, data) {
+      if (err) {
+        console.log("err is " + err);
+      }
+
+      //Get S3 filepath & set it to carouselImageToUpload
+      carouselImageToUpload = data.Location
+
+      var currentDate = new Date();
+
+      //Use Sequelize to push to DB
+      models.Carousel.create({
+          imagepath: carouselImageToUpload,
+          quote: req.body.NewQuote,
+          quotesource: req.body.NewSource,
+          createdAt: currentDate,
+          updatedAt: currentDate
+      }).then(function(){
+        res.redirect('../admincarousel');
+    });
+  });
+
   } else {
     carouselImageToUpload = req.body.carouselImage; //carousel image was unchanged
+
+    var currentDate = new Date();
+
+    //Use Sequelize to push to DB
+    models.Carousel.create({
+        imagepath: carouselImageToUpload,
+        quote: req.body.NewQuote,
+        quotesource: req.body.NewSource,
+        createdAt: currentDate,
+        updatedAt: currentDate
+    }).then(function(){
+      res.redirect('../admincarousel');
+    })
   }
-
-  var currentDate = new Date();
-
-  //Use Sequelize to push to DB
-  models.Carousel.create({
-      imagepath: carouselImageToUpload,
-      quote: req.body.NewQuote,
-      quotesource: req.body.NewSource,
-      createdAt: currentDate,
-      updatedAt: currentDate
-  }).then(function(){
-
-    res.redirect('../admincarousel');
-  })
 });
 
 router.post('/updateCarousel', isLoggedIn, upload.single('carouselPicture'), function(req, res) {
 
   var carouselImageToUpload;
 
-  //Check if image was upload & process it
+  //Check if image was uploaded & process it
   if (typeof req.file !== "undefined") {
-    var tempImagePath  = req.file.path;
-    var destinationPath = 'public/images/' + req.file.originalname;
+    //Process file being uploaded
+    var fileName = req.file.originalname;
+    var fileType = req.file.mimetype;
+    var stream = fs.createReadStream(req.file.path) //Create "stream" of the file
 
-    var imageSource = fs.createReadStream(tempImagePath);
-    var imageDestination = fs.createWriteStream(destinationPath);
-    imageSource.pipe(imageDestination);
+    //Create Amazon S3 specific object
+    var s3 = new aws.S3();
 
-    carouselImageToUpload = "/images/" + req.file.originalname;
+    var params = {
+      Bucket: S3_BUCKET,
+      Key: fileName, //This is what S3 will use to store the data uploaded.
+      Body: stream, //the actual *file* being uploaded
+      ContentType: fileType, //type of file being uploaded
+      ACL: 'public-read', //Set permissions so everyone can see the image
+      processData: false,
+      accessKeyId: S3_accessKeyId,
+      secretAccessKey: S3_secretAccessKey
+     }
+
+    s3.upload( params, function(err, data) {
+      if (err) {
+        console.log("err is " + err);
+      }
+
+      //Get S3 filepath & set it to carouselImageToUpload
+      carouselImageToUpload = data.Location
+
+      var currentDate = new Date();
+
+      //Use Sequelize to find the record
+      models.Carousel.findOne({ where: {id: req.body.dbid} })
+      
+      .then(function(id) {
+        //Update the data
+        id.updateAttributes({
+            imagepath: carouselImageToUpload,
+            quote: req.body.carouselQuote,
+            quotesource: req.body.carouselSource,
+            updatedAt: currentDate
+        }).then(function(){
+          res.redirect('../admincarousel');
+        })
+      })
+    });
   } else {
-    carouselImageToUpload = req.body.carouselImage; //carousel image was unchaged
-  }
+    carouselImageToUpload = req.body.carouselImage; //carousel image was unchanged
 
-  var currentDate = new Date();
+    var currentDate = new Date();
 
-  //Use Sequelize to find the relevant DB object
-  models.Carousel.findOne({ where: {id: req.body.dbid} })
-  
-  .then(function(id) {
-    //Update the data
-    id.updateAttributes({
-        imagepath: carouselImageToUpload,
-        quote: req.body.carouselQuote,
-        quotesource: req.body.carouselSource,
-        updatedAt: currentDate
-    }).then(function(){
-      res.redirect('../admincarousel');
+    //Use Sequelize to push to DB
+    models.Carousel.findOne({ where: {id: req.body.dbid} })
+      
+    .then(function(id) {
+      //Update the data
+      id.updateAttributes({
+          imagepath: carouselImageToUpload,
+          quote: req.body.carouselQuote,
+          quotesource: req.body.carouselSource,
+          updatedAt: currentDate
+      }).then(function(){
+        res.redirect('../admincarousel');
+      })
     })
-  })
+  }
 });
 
 // route middleware to make sure user is verified
