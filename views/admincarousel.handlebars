@@ -16,26 +16,64 @@
   {{#each dynamicData}}
     <div class="row">
       <form enctype="multipart/form-data" action="updateCarousel" method="POST">
-        <div class="adminImageArea col-md-5">
+        <div class="adminImageArea col-md-7">
           
-          <input type="file" name="carouselPicture" id="carouselPicture">
-          
-          <input type="hidden" id="carouselImage" name="carouselImage" value="{{this.imagepath}}"/>
           <div class='row'>
-            <div class='col-xs-3 formLabel'>
+            <div class='col-xs-4 formLabel'>
               Quote:
             </div>
-            <div class='col-xs-9'>
+            <div class='col-xs-8'>
               <input class="formInput" type="text" id="carouselQuote" name="carouselQuote" value="{{this.quote}}"/>
             </div>
           </div>
           <div class='row'>
-            <div class='col-xs-3 formLabel'>
+            <div class='col-xs-4 formLabel'>
               Attribution:
             </div>
-            <div class='col-xs-9'>
+            <div class='col-xs-8'>
               <input class="formInput" type="text" id="carouselSource" name="carouselSource" value="{{this.quotesource}}"/>
               <input type="hidden" id="dbid" name="dbid" value="{{this.id}}"/>
+            </div>
+          </div>
+
+          <div class='row'>
+            <div class='col-xs-4 formLabel'>
+              Quote Width:
+            </div>
+            <div class='col-xs-8'>
+              <input class="formInput" type="text" id="quoteWidth" name="quoteWidth" value="{{this.quoteWidth}}"/>
+            </div>
+          </div>
+
+          <div class='row'>
+            <div class='col-xs-4 formLabel'>
+              Quote Height:
+            </div>
+            <div class='col-xs-8'>
+              <input class="formInput" type="text" id="quoteHeight" name="quoteHeight" value="{{this.quoteHeight}}"/>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-xs-4 formLabel">
+              Horizontal Position: 
+            </div>
+            <div class="col-xs-8">
+              <select class="formInput" id="hPosition" name="hPosition">
+                <option value="left" {{#if this.left}} selected{{/if}}>Left</option>
+                <option value="right" {{#if this.right}} selected{{/if}}>Right</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-4 formLabel">
+              Vertical Position: 
+            </div>
+            <div class="col-xs-8">
+              <select class="formInput" id="vPosition" name="vPosition">
+                <option value="top" {{#if this.top}} selected{{/if}}>Top</option>
+                <option value="bottom" {{#if this.bottom}}selected {{/if}}>Bottom</option>
+              </select>
             </div>
           </div>
 
@@ -45,8 +83,10 @@
           </a>
         </div>
 
-        <div class="adminTextArea col-md-7">
+        <div class="adminTextArea col-md-5">
             <img class="carouselPreview" src="{{this.imagepath}}">
+            <input type="file" name="carouselPicture" id="carouselPicture">
+            <input type="hidden" id="carouselImage" name="carouselImage" value="{{this.imagepath}}"/>
         </div>
       </form>
     </div>
@@ -74,23 +114,69 @@
             <input type="file" name="carouselPicture" id="carouselPicture">
             
             <div class="row">
-              <div class="col-xs-3 formLabel">
+              <div class="col-xs-4 formLabel">
                 Quote: 
               </div>
-              <div class="col-xs-9 ">
+              <div class="col-xs-8 ">
                 <input class="formInput" type="text" id="NewQuote" name="NewQuote"/> 
               </div>
             </div>
             <div class="row">
-              <div class="col-xs-3 formLabel">
+              <div class="col-xs-4 formLabel">
                 Attribution: 
               </div>
-              <div class="col-xs-9">
+              <div class="col-xs-8">
                 <input class="formInput" type="text" id="NewSource" name="NewSource"/> 
               </div>
             </div>
+
+
+
+          <div class='row'>
+            <div class='col-xs-4 formLabel'>
+              Quote Width:
+            </div>
+            <div class='col-xs-8'>
+              <input class="formInput" type="text" id="newQuoteWidth" name="newQuoteWidth"/>
+            </div>
+          </div>
+
+          <div class='row'>
+            <div class='col-xs-4 formLabel'>
+              Quote Height:
+            </div>
+            <div class='col-xs-8'>
+              <input class="formInput" type="text" id="newQuoteHeight" name="newQuoteHeight"/>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-xs-4 formLabel">
+              Horizontal Position: 
+            </div>
+            <div class="col-xs-8">
+              <select class="formInput" id="newHPosition" name="newHPosition">
+                <option value="left">Left</option>
+                <option value="right">Right</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-4 formLabel">
+              Vertical Position: 
+            </div>
+            <div class="col-xs-8">
+              <select class="formInput" id="newVPosition" name="newVPosition">
+                <option value="top">Top</option>
+                <option value="bottom">Bottom</option>
+              </select>
+            </div>
+          </div>
+
+            <div class="row">
               <button type="submit" id="update">Submit</button>
               <button type="cancel" id="cancel" data-dismiss="modal">Cancel</button>
+            </div>
           </form>
         </div>
       </div>

@@ -4,6 +4,10 @@ module.exports = function(sequelize, DataTypes) {
     imagepath: DataTypes.STRING,
     quote: DataTypes.STRING,
     quotesource: DataTypes.STRING,
+    quoteWidth: DataTypes.STRING,
+    quoteHeight: DataTypes.STRING,
+    vAlignment: DataTypes.STRING,
+    hAlignment: DataTypes.STRING,
   }, {
     classMethods: {
       associate: function(models) {

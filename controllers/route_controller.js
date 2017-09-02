@@ -174,6 +174,25 @@ router.get('/admincarousel', isLoggedIn, function(req, res) {
   .then(function(data) {
     var payload = {dynamicData: data}
     payload.dynamicData["administrator"] = true;
+
+    //Loop through each instance & add positional elements for rendering in the CMS
+    for (i=0; i < payload.dynamicData.length; i++) {
+      //Check vertical alignment
+      if (payload.dynamicData[i].vAlignment == "bottom") {
+        payload.dynamicData[i]["bottom"] = true;
+      } else {
+        payload.dynamicData[i]["top"] = true;
+      }
+
+      //Check horizontal alignment
+      if (payload.dynamicData[i].hAlignment == "left") {
+        payload.dynamicData[i]["left"] = true;
+      } else {
+        payload.dynamicData[i]["right"] = true;
+      }
+
+    }
+
     res.render('admincarousel', {dynamicData: payload.dynamicData});
   })
 
@@ -611,12 +630,17 @@ router.post('/newCarousel', isLoggedIn, upload.single('carouselPicture'), functi
           quote: req.body.NewQuote,
           quotesource: req.body.NewSource,
           createdAt: currentDate,
-          updatedAt: currentDate
+          updatedAt: currentDate,
+          hAlignment: req.body.newHPosition,
+          vAlignment: req.body.newVPosition,
+          quoteWidth: req.body.newQuoteWidth,
+          quoteHeight: req.body.newQuoteHeight
       }).then(function(){
         res.redirect('../admincarousel');
     });
   });
 
+  //This can likely be deleted since uploading an image is a requirement for a new carousel
   } else {
     carouselImageToUpload = req.body.carouselImage; //carousel image was unchanged
 
@@ -628,7 +652,11 @@ router.post('/newCarousel', isLoggedIn, upload.single('carouselPicture'), functi
         quote: req.body.NewQuote,
         quotesource: req.body.NewSource,
         createdAt: currentDate,
-        updatedAt: currentDate
+        updatedAt: currentDate,
+        hAlignment: req.body.newHPosition,
+        vAlignment: req.body.newVPosition,
+        quoteWidth: req.body.newQuoteWidth,
+        quoteHeight: req.body.newQuoteHeight
     }).then(function(){
       res.redirect('../admincarousel');
     })
@@ -679,7 +707,11 @@ router.post('/updateCarousel', isLoggedIn, upload.single('carouselPicture'), fun
             imagepath: carouselImageToUpload,
             quote: req.body.carouselQuote,
             quotesource: req.body.carouselSource,
-            updatedAt: currentDate
+            updatedAt: currentDate,
+            hAlignment: req.body.hPosition,
+            vAlignment: req.body.vPosition,
+            quoteWidth: req.body.quoteWidth,
+            quoteHeight: req.body.quoteHeight
         }).then(function(){
           res.redirect('../admincarousel');
         })
@@ -699,8 +731,13 @@ router.post('/updateCarousel', isLoggedIn, upload.single('carouselPicture'), fun
           imagepath: carouselImageToUpload,
           quote: req.body.carouselQuote,
           quotesource: req.body.carouselSource,
-          updatedAt: currentDate
-      }).then(function(){
+          updatedAt: currentDate,
+          hAlignment: req.body.hPosition,
+          vAlignment: req.body.vPosition,
+          quoteWidth: req.body.quoteWidth,
+          quoteHeight: req.body.quoteHeight
+
+        }).then(function(){
         res.redirect('../admincarousel');
       })
     })
