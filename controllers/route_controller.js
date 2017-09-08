@@ -528,30 +528,44 @@ router.post('/updateschedule', isLoggedIn, upload.single('schedulepicture'), fun
 
       //Get S3 filepath & set it to scheduleImageToUpload
       scheduleImageToUpload = data.Location
-      console.log("*********************")
-      console.log(data.Location)
-      console.log("*********************")
+
+        //Use Sequelize to find the relevant DB object
+        models.Schedule.findOne({ where: {id: 1} })
+        
+        .then(function(id) {
+          var currentDate = new Date();
+
+          //Update the data
+          id.updateAttributes({
+              scheduletext: req.body.ScheduleText,
+              scheduleimage: scheduleImageToUpload,
+              updatedAt: currentDate
+          }).then(function(){
+            res.redirect('../adminschedule');
+          })
+        })
     });
 
   } else { //image did not change, so maintain the old URL
     scheduleImageToUpload = req.body.scheduleimage; 
-  }
 
-  //Use Sequelize to find the relevant DB object
-  models.Schedule.findOne({ where: {id: 1} })
-  
-  .then(function(id) {
-    var currentDate = new Date();
+    //Use Sequelize to find the relevant DB object
+    models.Schedule.findOne({ where: {id: 1} })
+    
+    .then(function(id) {
+      var currentDate = new Date();
 
-    //Update the data
-    id.updateAttributes({
-        scheduletext: req.body.ScheduleText,
-        scheduleimage: scheduleImageToUpload,
-        updatedAt: currentDate
-    }).then(function(){
-      res.redirect('../adminschedule');
+      //Update the data
+      id.updateAttributes({
+          scheduletext: req.body.ScheduleText,
+          scheduleimage: scheduleImageToUpload,
+          updatedAt: currentDate
+      }).then(function(){
+        res.redirect('../adminschedule');
+      })
     })
-  })
+
+  }
 });
 
 
