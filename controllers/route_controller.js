@@ -528,7 +528,9 @@ router.post('/updateschedule', isLoggedIn, upload.single('schedulepicture'), fun
 
       //Get S3 filepath & set it to scheduleImageToUpload
       scheduleImageToUpload = data.Location
-
+      console.log("*********************")
+      console.log(data.Location)
+      console.log("*********************")
     });
 
   } else { //image did not change, so maintain the old URL
