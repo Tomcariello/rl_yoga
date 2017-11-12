@@ -398,3 +398,6 @@ hr {
 .schedule {
 	padding-left: 10%;	
 }
+.hideOnMobile {
+	display: none;
+}

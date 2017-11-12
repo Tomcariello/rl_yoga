@@ -13,7 +13,7 @@
           {{#each dynamicData}}
             <div class="item   {{#if @first}}active{{/if}}">
               <img class="d-block img-fluid" src="{{this.imagepath}}" alt="First slide">
-              <div class="carousel-caption d-none d-md-block" style="height: {{this.quoteHeight}}px; width: {{this.quoteWidth}}px; {{this.vAlignment}}: 0; {{this.hAlignment}}: 0;">
+              <div class="carousel-caption d-none d-md-block hideOnMobile" style="height: {{this.quoteHeight}}px; width: {{this.quoteWidth}}px; {{this.vAlignment}}: 0; {{this.hAlignment}}: 0;">
                 <p>{{this.quote}}</p>
                 <p>{{this.quotesource}}</p>
               </div>
