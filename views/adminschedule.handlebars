@@ -43,12 +43,17 @@
 
       //Initialize Summernote for the Schedule
       $('#summernoteSchedule').summernote({
+        fontNames: ["Arial", "Arial Black", "Courier New", "Helvetica Neue", "Helvetica", 
+                    "Impact", "Lucida Grande", "Tahoma", "Times New Roman", "Verdana"],
+        fontNamesIgnoreCheck: ["Arial", "Arial Black", "Courier New", "Helvetica Neue", "Helvetica", 
+                    "Impact", "Lucida Grande", "Tahoma", "Times New Roman", "Verdana"],
         toolbar: [
-            // [groupName, [list of button]]
             ['style', ['bold', 'italic', 'underline', 'clear']],
             ['font', ['strikethrough', 'superscript', 'subscript']],
             ['fontsize', ['fontsize']],
+            ["fontname", ["fontname"]],
             ['para', ['ul', 'ol', 'paragraph']],
+            ['height', ['height']],
             ['insert', ['link']]
           ]
       });

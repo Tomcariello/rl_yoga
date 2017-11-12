@@ -71,24 +71,34 @@
     $(document).ready(function() {
       //Initialize Summernote for the About Me section
       $('#summernoteAboutMe').summernote({
+        fontNames: ["Arial", "Arial Black", "Courier New", "Helvetica Neue", "Helvetica", 
+                    "Impact", "Lucida Grande", "Tahoma", "Times New Roman", "Verdana"],
+        fontNamesIgnoreCheck: ["Arial", "Arial Black", "Courier New", "Helvetica Neue", "Helvetica", 
+                    "Impact", "Lucida Grande", "Tahoma", "Times New Roman", "Verdana"],
         toolbar: [
-            // [groupName, [list of button]]
             ['style', ['bold', 'italic', 'underline', 'clear']],
             ['font', ['strikethrough', 'superscript', 'subscript']],
             ['fontsize', ['fontsize']],
+            ["fontname", ["fontname"]],
             ['para', ['ul', 'ol', 'paragraph']],
+            ['height', ['height']],
             ['insert', ['link']]
           ]
       });
 
       //Initialize Summernote for the Bio section
       $('#summernoteBio').summernote({
+        fontNames: ["Arial", "Arial Black", "Courier New", "Helvetica Neue", "Helvetica", 
+                    "Impact", "Lucida Grande", "Tahoma", "Times New Roman", "Verdana"],
+        fontNamesIgnoreCheck: ["Arial", "Arial Black", "Courier New", "Helvetica Neue", "Helvetica", 
+                    "Impact", "Lucida Grande", "Tahoma", "Times New Roman", "Verdana"],
         toolbar: [
-            // [groupName, [list of button]]
             ['style', ['bold', 'italic', 'underline', 'clear']],
             ['font', ['strikethrough', 'superscript', 'subscript']],
             ['fontsize', ['fontsize']],
+            ["fontname", ["fontname"]],
             ['para', ['ul', 'ol', 'paragraph']],
+            ['height', ['height']],
             ['insert', ['link']]
           ]
       });
