@@ -1,6 +1,6 @@
 <section class="main">
   <div class='row'>
-    <div class="col-xs-12 pageTitle">
+    <div class="col-xs-10 col-xs-offset-1 pageTitle">
       Contact
     </div>
   </div>
@@ -9,59 +9,71 @@
 
   {{#if dynamicData.messageSent}}
     <div class='row'>
-      <div class="col-xs-12 messageSent">
+      <div class="col-xs-10 col-xs-offset-1 messageSent">
         Thank you for your message!
       </div>
     </div>
   {{/if}}
 
     <div class='row'>
-      <div class="col-xs-2 formLabel">
-        Name:
-      </div>
-      <div class="col-xs-8">
-        <input class="formInput" type="text" id ="fname" name="fname"  placeholder="John Smith">
-      </div>
-    </div>
+      <div class="col-xs-10 col-xs-offset-1">
+        <div class='row'>
+          <div class="col-xs-2 formLabel">
+            Name:
+          </div>
+          <div class="col-xs-8">
+            <input class="formInput" type="text" id ="fname" name="fname"  placeholder="John Smith">
+          </div>
+        </div>
 
-    <div class='row'>
-      <div class="col-xs-2 formLabel">
-        E-mail:
-      </div>
-      <div class="col-xs-8">
-        <input class="formInput" type="text" id="email" name="email"  placeholder="example@gmail.com">
-      </div>
-    </div>
+        <div class='row'>
+          <div class="col-xs-2 formLabel">
+            E-mail:
+          </div>
+          <div class="col-xs-8">
+            <input class="formInput" type="text" id="email" name="email"  placeholder="example@gmail.com">
+          </div>
+        </div>
 
+        <div class='row'>
+          <div class="col-xs-2 formLabel">
+            Reason:
+          </div>
+          <div class="col-xs-8">
+            <select class="formInput" id="reason" name="reason">
+              <option>--</option>
+              <option value="1">General Inquiry</option>
+              <option value="2">Request a lesson</option>
+              <option value="3">Reason 3</option>
+              <option value="4">Reason 4</option>
+            </select>
+          </div>
+        </div>
+      </div> 
+    </div>
+    
     <div class='row'>
-      <div class="col-xs-2 formLabel">
-        Reason:
-      </div>
-      <div class="col-xs-8">
-        <select class="formInput" id="reason" name="reason">
-          <option>--</option>
-          <option value="1">General Inquiry</option>
-          <option value="2">Request a lesson</option>
-          <option value="3">Reason 3</option>
-          <option value="4">Reason 4</option>
-        </select>
+      <div class="col-xs-10 col-xs-offset-1">
+        <div class='row'>
+          <div class="col-xs-2 formLabel">
+            Message:
+          </div>
+          <div class="col-xs-10">
+            <textarea class="formInput" id="message" name="message"></textarea>
+          </div>
+        </div>
       </div>
     </div>
     
     <div class='row'>
-      <div class="col-xs-2 formLabel">
-        Message:
-      </div>
-      <div class="col-xs-10">
-        <textarea class="formInput" id="message" name="message"></textarea>
-      </div>
-    </div>
-    
-    <div class='row'>
-      <div class="col-xs-2 formLabel">
-      </div>
-      <div class="col-xs-10">
-        <button id="contactSubmit" type="submit">Submit</button>
+      <div class="col-xs-10 col-xs-offset-1">
+        <div class='row'>
+          <div class="col-xs-2 formLabel">
+          </div>
+          <div class="col-xs-10">
+            <button id="contactSubmit" type="submit">Submit</button>
+          </div>
+        </div>
       </div>
     </div>
   </form>

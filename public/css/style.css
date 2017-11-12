@@ -265,10 +265,8 @@ button:hover {
 }
  .yogavideo {
 	 margin-bottom: 10px;
-     margin-right: 10%;
-     width: 40%;
-     float: left;
-     min-height: 300px;
+	 min-height: 300px;
+	 text-align: center;
  }
  .videoTitle {
 	 font-size: 20px;
